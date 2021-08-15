@@ -30,5 +30,37 @@ namespace EsgFiskDll
         {
             return FiscOps.registerCashDeposit(conn, configs, cashDepositId, UserId);
         }
+        public string registerInvoice(int InvoiceId)
+        {
+            return FiscOps.registerInvoice(conn, configs, InvoiceId, UserId);
+        }
+        public string registerEInvoice(int InvoiceId)
+        {
+            return FiscOps.registerInvoice(conn, configs, InvoiceId, UserId);
+        }
+        public string getTaxPayer(string TaxpayerNipt)
+        {
+            return FiscOps.getTaxPayer(conn, configs, TaxpayerNipt, UserId);
+        }
+        public string RegisterWTN(int InvoiceId)
+        {
+            return FiscOps.registerInvoice(conn, configs, InvoiceId, UserId);
+        }
+        public string GenerateIICType(int InvoiceId)
+        {
+            return FiscOps.GenerateIICType(conn, configs, InvoiceId, UserId);
+        }
+        public string GenerateWTNICType(int InvoiceId)
+        {
+            return FiscOps.GenerateWTNICType(conn, configs, InvoiceId, UserId);
+        }
+        public string CalculateWTNQRCode(int InvoiceId)
+        {
+            return FiscOps.GenerateWTNICType(conn, configs, InvoiceId, UserId);
+        }
+        public string CalculateQRCode(int InvoiceId)
+        {
+            return FiscOps.CalculateQRCode(conn, configs, InvoiceId, UserId);
+        }
     }
 }

@@ -11,7 +11,6 @@ namespace EsgFiskDll
 {
     public class EsgFisc
     {
-        private SqlConnection conn { get; set; }
         private FiskConfigs configs { get; set; }
         private EsgFiskCalls FiscCalls { get; set; }
         public EsgFisc(SqlConnection _conn, int UserId )
@@ -21,7 +20,7 @@ namespace EsgFiskDll
             switch (configs.fiscCompany)
             {
                 case "LOGICAL":
-                    FiscCalls = new EsgFiskCalls(conn, configs, UserId, new Logical.LogiFis());
+                    FiscCalls = new EsgFiskCalls(_conn, configs, UserId, new Logical.LogiFis());
                     break;
                 default:
                     break;
@@ -29,7 +28,7 @@ namespace EsgFiskDll
 
 
         }
-       public string registerCashDesk( int CashDeskId)
+        public string registerCashDesk( int CashDeskId)
         {
             return FiscCalls.registerCashDesk(CashDeskId);
         }
@@ -37,5 +36,38 @@ namespace EsgFiskDll
         {
             return FiscCalls.registerCashDeposit(CashDepositId);
         }
+        public string registerInvoice(int InvoiceId)
+        {
+            return FiscCalls.registerInvoice(InvoiceId);
+        }
+        public string registerEInvoice(int InvoiceId)
+        {
+            return FiscCalls.registerEInvoice(InvoiceId);
+        }
+        public string getTaxPayer(string TaxPayerNipt)
+        {
+            return FiscCalls.getTaxPayer(TaxPayerNipt);
+        }
+        public string RegisterWTN(int InvoiceId)
+        {
+            return FiscCalls.RegisterWTN(InvoiceId);
+        }
+        public string GenerateIICType(int InvoiceId)
+        {
+            return FiscCalls.GenerateIICType(InvoiceId);
+        }
+        public string GenerateWTNICType(int InvoiceId)
+        {
+            return FiscCalls.GenerateWTNICType(InvoiceId);
+        }
+        public string CalculateWTNQRCode(int InvoiceId)
+        {
+            return FiscCalls.CalculateWTNQRCode(InvoiceId);
+        }
+        public string CalculateQRCode(int InvoiceId)
+        {
+            return FiscCalls.CalculateQRCode(InvoiceId);
+        }
+
     }
 }
