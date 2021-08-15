@@ -78,4 +78,7 @@
       <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="RegisterClrFunctions.sql" />
+  </ItemGroup>
 </Project>

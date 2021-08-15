@@ -34,16 +34,15 @@ namespace EsgFiskDll.Logical.ApiCalls
                 }
                 else
                 {
-                    EsgMessage = "600 - Gabim i panjohur." + resp.ToString();
+                    EsgMessage = "600 - Gabim i panjohur.";
                 }
   
                 string errorString = @"{" + "\n" +
-                @"  ""EsgMessage"": """ + EsgMessage + "," + "\n" +
-                @"  ""ErrorCode"": """ + code + "," + "\n" +
-                @"  ""ErrorMessage"": """ + ErrorMessage + "," + "\n" +
-                @"  ""requestUUID"": """ + requestUUID + "," + "\n" +
-                @"  ""responseUUID"": """ + responseUUID + "," + "\n" +
-                @"  ""content"": """ + resp.StatusCode + ":" + resp.StatusDescription + ":" + resp.Content + "," + "\n" +
+                @"  ""EsgMessage"": """ + EsgMessage + @"""," + "\n" +
+                @"  ""ErrorCode"": """ + code + @"""," + "\n" +
+                @"  ""ErrorMessage"": """ + ErrorMessage + @"""," + "\n" +
+                @"  ""requestUUID"": """ + requestUUID + @"""," + "\n" +
+                @"  ""responseUUID"": """ + responseUUID + @"""," + "\n" +
                 @"}";
 
                 return errorString;

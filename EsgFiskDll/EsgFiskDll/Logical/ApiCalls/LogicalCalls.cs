@@ -53,7 +53,6 @@ namespace EsgFiskDll.Logical.ApiCalls
                 IRestClient client = new RestClient(url);
                 IRestRequest request = new RestRequest(Method.POST);
 
-
                 IRestResponse<RegisterCashDeskResponse> resp = RestRequestHandler<RegisterCashDeskReq, RegisterCashDeskResponse>.MakeResquest(client, request, body, Configs);
 
                 if (resp.IsSuccessful)
@@ -64,7 +63,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                 {
                     return ErrorParser<RegisterCashDeskResponse>.ParseError(resp);
                 }
-                
+
             }
             catch (SqlException ex)
             {
@@ -84,7 +83,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                     {
                         command.CommandType = System.Data.CommandType.StoredProcedure;
                         command.CommandText = "UP_FISC_NEW_CREATE_REGISTER_CASH_DEPOSIT_REQUEST";
-                        command.Parameters.Add(new SqlParameter { ParameterName = "CashDepositId",  Direction = System.Data.ParameterDirection.Input, Precision = 8, Value = CashDepositId });
+                        command.Parameters.Add(new SqlParameter { ParameterName = "CashDepositId", Direction = System.Data.ParameterDirection.Input, Precision = 8, Value = CashDepositId });
                         command.Connection = Conn;
                         DataSet ds = new DataSet();
                         sda.Fill(ds);
@@ -100,7 +99,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                                     IssuerNUIS = Configs.IssuerNUIS,
                                     TCRCode = ds.Tables[0].Rows[0]["TCRCode"].ToString(),
                                     Operation = ds.Tables[0].Rows[0]["Operation"].ToString()
-                                };                 
+                                };
                             }
                         }
                     }
@@ -137,7 +136,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                 GenerateIICTYPEReq body = new GenerateIICTYPEReq(Configs);
                 using (SqlCommand command = new SqlCommand())
                 {
-                    using(SqlDataAdapter sda = new SqlDataAdapter(command))
+                    using (SqlDataAdapter sda = new SqlDataAdapter(command))
                     {
                         command.CommandType = System.Data.CommandType.StoredProcedure;
                         command.CommandText = "UP_FISC_NEW_CREATE_IICTYPE_REQUEST";
@@ -151,7 +150,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                             {
                                 body.TcrCode = ds.Tables[0].Rows[0]["TcrCode"].ToString();
                                 body.InvNum = ds.Tables[0].Rows[0]["InvNum"].ToString();
-                                body.TotPrice = double.Parse( ds.Tables[0].Rows[0]["TotPrice"].ToString());
+                                body.TotPrice = double.Parse(ds.Tables[0].Rows[0]["TotPrice"].ToString());
                             }
                         }
                     }
@@ -166,7 +165,7 @@ namespace EsgFiskDll.Logical.ApiCalls
 
                 if (resp.IsSuccessful)
                 {
-                    return "100 - " + resp.Data.iic  + "@------@" + resp.Data.iicSignature;
+                    return "100 - " + resp.Data.iic + "@------@" + resp.Data.iicSignature;
                 }
                 else
                 {
@@ -219,7 +218,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                 request.AddHeader("Connection", "keep-alive");
                 request.AddJsonBody(body);
                 HttpBasicAuthenticator authenticator = new HttpBasicAuthenticator(Configs.ApiUsername, Configs.ApiPassword);
-                authenticator.Authenticate(client, request );
+                authenticator.Authenticate(client, request);
                 IRestResponse resp = client.Post(request);
 
                 if (resp.IsSuccessful)
@@ -228,7 +227,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                 }
                 else
                 {
-                    return "400 - Gabim : "  + resp.ErrorMessage + "     StatusCode:" + resp.StatusCode + "   Content : " + resp.Content;
+                    return "400 - Gabim : " + resp.ErrorMessage + "     StatusCode:" + resp.StatusCode + "   Content : " + resp.Content;
                 }
 
             }
@@ -240,7 +239,7 @@ namespace EsgFiskDll.Logical.ApiCalls
 
         public string doGetTaxpayers(SqlConnection Conn, FiskConfigs Configs, string TaxPayerNIPT, Int32 UserId)
         {
-            TaxPayer tp = GetTaxpayers( Conn,  Configs,  TaxPayerNIPT,  UserId);
+            TaxPayer tp = GetTaxpayers(Conn, Configs, TaxPayerNIPT, UserId);
 
             return tp.address;
 
@@ -319,13 +318,13 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 body.Invoice.TotVATAmt = (double)ds.Tables[0].Rows[0]["TotVATAmt"];
                                 body.Invoice.TotVATAmtSpecified = (int)ds.Tables[0].Rows[0]["TotVATAmtSpecified"] == 1;
                                 body.Invoice.TypeOfInv = (string)ds.Tables[0].Rows[0]["TypeOfInv"];
-                               
+
                             }
 
-                            if(ds.Tables[1].Rows.Count != 0)
+                            if (ds.Tables[1].Rows.Count != 0)
                             {
                                 body.Invoice.Items = new List<Item>();
-                                foreach(DataRow dr in ds.Tables[1].Rows)
+                                foreach (DataRow dr in ds.Tables[1].Rows)
                                 {
                                     Item item = new Item();
 
@@ -346,10 +345,10 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 }
                             }
 
-                            if(ds.Tables[2].Rows.Count != 0)
+                            if (ds.Tables[2].Rows.Count != 0)
                             {
                                 body.Invoice.PayMethods = new List<PayMethod>();
-                                foreach(DataRow dr in ds.Tables[2].Rows)
+                                foreach (DataRow dr in ds.Tables[2].Rows)
                                 {
                                     PayMethod pm = new PayMethod
                                     {
@@ -360,10 +359,10 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 }
                             }
 
-                            if(ds.Tables[3].Rows.Count != 0)
+                            if (ds.Tables[3].Rows.Count != 0)
                             {
                                 body.Invoice.SameTaxes = new List<SameTax>();
-                                foreach(DataRow dr in ds.Tables[3].Rows)
+                                foreach (DataRow dr in ds.Tables[3].Rows)
                                 {
                                     SameTax sm = new SameTax
                                     {
