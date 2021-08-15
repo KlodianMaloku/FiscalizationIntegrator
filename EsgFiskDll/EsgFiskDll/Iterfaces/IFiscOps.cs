@@ -15,7 +15,7 @@ namespace EsgFiskDll.Iterfaces
         string registerCashDeposit(SqlConnection conn, FiskConfigs Configs, int CashDepositId, int UserId);
         string registerInvoice(SqlConnection conn, FiskConfigs Configs, int InvoiceId, int UserId);
         string registerEInvoice(SqlConnection conn, FiskConfigs Configs, int InvoiceId, int UserId);
-        string getTaxPayer(SqlConnection conn, FiskConfigs Configs, int TaxPayerId, int UserId);
+        string getTaxPayer(SqlConnection conn, FiskConfigs Configs, string TaxPayerNipt, int UserId);
         string RegisterWTN(SqlConnection conn, FiskConfigs Configs, int WTNId, int UserId);
         string GenerateIICType(SqlConnection conn, FiskConfigs Configs, int InvoiceId, int UserId);
         string GenerateWTNICType(SqlConnection conn, FiskConfigs Configs, int WTNId, int UserId);

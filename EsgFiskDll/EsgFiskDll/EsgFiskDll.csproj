@@ -64,10 +64,9 @@
   <ItemGroup>
     <Compile Include="EsgFiskCalls.cs" />
     <Compile Include="Iterfaces\IFiscOps.cs" />
-    <Compile Include="Logical\ApiCalls\CashDeskCalls.cs" />
+    <Compile Include="Logical\ApiCalls\LogicalCalls.cs" />
     <Compile Include="Logical\ApiCalls\ErrorParser.cs" />
     <Compile Include="Classes\FiskConfigs.cs" />
-    <Compile Include="Logical\ApiCalls\HelperCalls.cs" />
     <Compile Include="Logical\ApiCalls\RequestBase.cs" />
     <Compile Include="EsgFisc.cs" />
     <Compile Include="Logical\ApiCalls\RestRequestHandler.cs" />
