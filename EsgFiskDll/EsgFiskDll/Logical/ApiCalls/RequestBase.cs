@@ -25,7 +25,7 @@ namespace EsgFiskDll.Logical.ApiCalls
         public RequestBase(FiskConfigs Configs)
         {
 
-            Header = new reqHeader { SendDateTime = System.DateTime.UtcNow.ToString("o") };
+            Header = new reqHeader { SendDateTime = System.DateTime.Now.ToString("o") };
             Certificate = new certificate { CertificatePassword = Configs.CertificatePassword, CertificatePath = Configs.CertificatePath };
             IsServiceTest = Configs.IsServiceTest;
                 

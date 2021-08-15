@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace EsgFiskDll.Logical
 {
 
-    public class TCR
+    internal class TCR
     {
         public string BusinUnitCode { get; set; }
         public string IssuerNUIS { get; set; }
@@ -20,7 +20,7 @@ namespace EsgFiskDll.Logical
         public bool ValidFromSpecified { get; set; }
     }
 
-    public class CashDeposit
+    internal class CashDeposit
     {
         public double CashAmt { get; set; }
         public string ChangeDateTime { get; set; }
@@ -30,13 +30,13 @@ namespace EsgFiskDll.Logical
 
     }
 
-    public class Invoice
+    internal class Invoice
     {
         public string BusinUnitCode { get; set; }
         public string IIC { get; set; }
         public string IICSignature { get; set; }
-        public string InvOrdNum { get; set; }
-        public int InvNum { get; set; }
+        public Int64 InvOrdNum { get; set; }
+        public string InvNum { get; set; }
         public bool IsEinvoice { get; set; }
         public bool IsIssuerInVAT { get; set; }
         public bool IsReverseCharge { get; set; }
@@ -44,12 +44,12 @@ namespace EsgFiskDll.Logical
         public string IssueDateTime { get; set; }
         public string OperatorCode { get; set; }
         public string PayDeadline { get; set; }
-        public string PayDeadlineSpecified { get; set; }
+        public bool PayDeadlineSpecified { get; set; }
         public string TCRCode { get; set; }
         public double TotPrice { get; set; }
         public double TotPriceWoVAT { get; set; }
         public double TotVATAmt { get; set; }
-        public double TotVATAmtSpecified { get; set; }
+        public bool TotVATAmtSpecified { get; set; }
         public string TypeOfInv { get; set; }
         public List<Item> Items { get; set; }
         public List<PayMethod> PayMethods { get; set; }
@@ -57,7 +57,7 @@ namespace EsgFiskDll.Logical
         public Seller Seller { get; set; }
     }
 
-    public class Item
+    internal class Item
     {
         public string C { get; set; }
         public string N { get; set; }
@@ -74,13 +74,13 @@ namespace EsgFiskDll.Logical
 
     }
 
-    public class PayMethod
+    internal class PayMethod
     {
         public double Amt { get; set; }
         public string Type { get; set; }
     }
 
-    public class SameTax
+    internal class SameTax
     {
         public int NumOfItems { get; set; }
         public double PriceBefVAT { get; set; }
@@ -91,7 +91,7 @@ namespace EsgFiskDll.Logical
 
     }
 
-    public class Seller
+    internal class Seller
     {
         public string Address { get; set; }
         public string Country { get; set; }
@@ -102,10 +102,16 @@ namespace EsgFiskDll.Logical
         public string Town { get; set; }
     }
 
+    internal class RegisterInvoiceReq : RequestBase
+    {
+        public RegisterInvoiceReq(FiskConfigs Configs):base(Configs)
+        {
 
+        }
+        public Invoice Invoice { get; set; }
+    }
 
-
-    class RegisterCashDeskReq : RequestBase
+    internal class RegisterCashDeskReq : RequestBase
     {
         public RegisterCashDeskReq(FiskConfigs Configs) : base(Configs)
         {
@@ -115,7 +121,7 @@ namespace EsgFiskDll.Logical
 
     }
 
-    class RegisterCashDepositReq : RequestBase
+    internal class RegisterCashDepositReq : RequestBase
     {
         public RegisterCashDepositReq(FiskConfigs Configs) : base(Configs)
         {
@@ -124,24 +130,60 @@ namespace EsgFiskDll.Logical
         public CashDeposit CashDeposit { get; set; }
     }
 
-
-    internal class GenerateIICTYPE
+    internal class GenerateIICTYPEReq
     {
-        public GenerateIICTYPE(FiskConfigs configs)
+        public GenerateIICTYPEReq(FiskConfigs configs)
         {
             IssuerNuis = configs.IssuerNUIS;
-            IssuerDateTime = System.DateTime.UtcNow.ToString("O");
+            IssueDateTime = System.DateTime.UtcNow.ToString("o");
             BusinUnitCode = configs.BusinUnitCode;
-            Certificate.CertificatePassword = configs.CertificatePassword;
-            Certificate.CertificatePath = configs.CertificatePath;
+            Certificate = new certificate
+            {
+                CertificatePassword = configs.CertificatePassword,
+                CertificatePath = configs.CertificatePath
+            };
+
+            IsServiceTest = configs.IsServiceTest;
         }
-        string IssuerNuis { get; set; }
-        string IssuerDateTime { get; set; }
-        string InvNum { get; set; }
-        string BusinUnitCode { get; set; }
-        string TcrCode { get; set; }
-        double TotPrice { get; set; }
-        certificate Certificate { get; set; }
+        public string IssuerNuis { get; set; }
+        public string IssueDateTime { get; set; }
+        public string InvNum { get; set; }
+        public string BusinUnitCode { get; set; }
+        public string TcrCode { get; set; }
+        public double TotPrice { get; set; }
+        public certificate Certificate { get; set; }
+        public bool IsServiceTest { get; set; }
+    }
+
+    internal class CalculateQRCodeReq
+    {
+        public CalculateQRCodeReq(FiskConfigs configs)
+        {
+            IssuerNuis = configs.IssuerNUIS;
+            IssueDateTime = System.DateTime.UtcNow.ToString("O");
+            IsServiceTest = configs.IsServiceTest;
+        }
+        public string IIC { get; set; }
+        public string IssuerNuis { get; set; }
+        public string IssueDateTime { get; set; }
+        public Int32 InvOrdNum { get; set; }
+        public string  TcrCode { get; set; }
+        public double TotPrice { get; set; }
+        public bool IsServiceTest { get; set; }
+    }
+
+    internal class GetTaxPayerFilter
+    {
+        public string Tin { get; set; }
+    }
+
+    internal class GetTaxPayersReq:RequestBase
+    {
+        public GetTaxPayersReq(FiskConfigs Configs) : base(Configs)
+        {
+
+        }
+        public GetTaxPayerFilter Filter { get; set; }
     }
 
 }

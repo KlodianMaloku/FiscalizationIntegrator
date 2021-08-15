@@ -11,13 +11,18 @@ namespace EsgFiskDll.Logical.ApiCalls
     {
         public static string ParseError(IRestResponse<T> resp)
         {
+            string EsgMessage = "";
+            string ErrorMessage = "";
+            string code = "";
+            string responseUUID = "";
+            string requestUUID = "";
+
             try
             {
-                string EsgMessage;
-                string ErrorMessage = resp.Content.Substring(resp.Content.IndexOf("<faultstring>")+13, resp.Content.IndexOf("</faultstring>") - resp.Content.IndexOf("<faultstring>")-13);
-                string code = resp.Content.Substring(resp.Content.IndexOf("<code>") + 6, resp.Content.IndexOf("</code>") - resp.Content.IndexOf("<code>") - 6);
-                string responseUUID = resp.Content.Substring(resp.Content.IndexOf("<responseUUID>") + 14, resp.Content.IndexOf("</responseUUID>") - resp.Content.IndexOf("<responseUUID>") - 14);
-                string requestUUID = resp.Content.Substring(resp.Content.IndexOf("<requestUUID>") + 13, resp.Content.IndexOf("</requestUUID>") - resp.Content.IndexOf("<requestUUID>") - 13);
+                try { ErrorMessage = resp.Content.Substring(resp.Content.IndexOf("<faultstring>") + 13, resp.Content.IndexOf("</faultstring>") - resp.Content.IndexOf("<faultstring>") - 13); } catch { };
+                try { code = resp.Content.Substring(resp.Content.IndexOf("<code>") + 6, resp.Content.IndexOf("</code>") - resp.Content.IndexOf("<code>") - 6); }catch { };
+                try { responseUUID = resp.Content.Substring(resp.Content.IndexOf("<responseUUID>") + 14, resp.Content.IndexOf("</responseUUID>") - resp.Content.IndexOf("<responseUUID>") - 14); } catch { };
+                try { requestUUID = resp.Content.Substring(resp.Content.IndexOf("<requestUUID>") + 13, resp.Content.IndexOf("</requestUUID>") - resp.Content.IndexOf("<requestUUID>") - 13); } catch { };
 
                 if (resp.StatusCode.ToString() == "400")
                 {
@@ -29,15 +34,16 @@ namespace EsgFiskDll.Logical.ApiCalls
                 }
                 else
                 {
-                    EsgMessage = "600 - Gabim i panjohur.";
+                    EsgMessage = "600 - Gabim i panjohur." + resp.ToString();
                 }
-            
+  
                 string errorString = @"{" + "\n" +
                 @"  ""EsgMessage"": """ + EsgMessage + "," + "\n" +
                 @"  ""ErrorCode"": """ + code + "," + "\n" +
                 @"  ""ErrorMessage"": """ + ErrorMessage + "," + "\n" +
                 @"  ""requestUUID"": """ + requestUUID + "," + "\n" +
                 @"  ""responseUUID"": """ + responseUUID + "," + "\n" +
+                @"  ""content"": """ + resp.StatusCode + ":" + resp.StatusDescription + ":" + resp.Content + "," + "\n" +
                 @"}";
 
                 return errorString;

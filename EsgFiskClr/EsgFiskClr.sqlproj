@@ -70,7 +70,7 @@
     <Compile Include="EsgFiskClr.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TestForm\EsgFiskDll\EsgFiskDll.csproj">
+    <ProjectReference Include="..\EsgFiskDll\EsgFiskDll\EsgFiskDll.csproj">
       <Name>EsgFiskDll</Name>
       <Project>{d1b776c0-10ae-4e4b-9eb9-4ff6e3dd51df}</Project>
       <Private>True</Private>

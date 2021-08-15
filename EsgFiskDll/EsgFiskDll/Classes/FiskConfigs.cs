@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -14,41 +15,52 @@ namespace EsgFiskDll.Classes
         {
             try
             {
-                using (SqlCommand command = new SqlCommand("select top 1 * from TBL_FISK_MAIN_DATA", Conn))
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (SqlCommand command = new SqlCommand())
                 {
-                    if (reader.HasRows)
+                    using (SqlDataAdapter sda = new SqlDataAdapter(command))
                     {
-                        while (reader.Read())
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
+                        command.CommandText = "UP_FISC_NEW_GET_FISK_MAIN_DATA";
+                        command.Connection = Conn;
+                        DataSet ds = new DataSet();
+                        sda.Fill(ds);
+                        if (ds.Tables.Count != 0)
                         {
-                            if ((int)reader["IsServiceTest"] == 1)
+                            if (ds.Tables[0].Rows.Count!=0)
                             {
-                                BusinUnitCode = (string)reader["testBusinUnitCode"];
-                                OperatorCode = (string)reader["testOperatorCode"];
-                                IssuerNUIS = (string)reader["testissuerNUIS"];
-                                CertificatePath = (string)reader["testCertificatePath"];
-                                CertificatePassword = (string)reader["testCertificatePassword"];
-                                CertificateData = (string)reader["testCertificateData"];
-                                ApiUsername = (string)reader["testFiskApiUsername"];
-                                ApiPassword = (string)reader["testFiskApiPassword"];
-                                url = (string)reader["testFiskCompanyUrl"];
-                            }
-                            else
-                            {
-                                BusinUnitCode = (string)reader["BusinUnitCode"];
-                                OperatorCode = (string)reader["OperatorCode"];
-                                IssuerNUIS = (string)reader["issuerNUIS"];
-                                CertificatePath = (string)reader["CertificatePath"];
-                                CertificatePassword = (string)reader["CertificatePassword"];
-                                CertificateData = (string)reader["CertificateData"];
-                                ApiUsername = (string)reader["FiskApiUsername"];
-                                ApiPassword = (string)reader["FiskApiPassword"];
-                                url = (string)reader["FiskCompanyUrl"];
-                            }
+                                foreach(DataRow dr in ds.Tables[0].Rows)
+                                {
+                                    if ((int)dr["IsServiceTest"] == 1)
+                                    {
+                                        BusinUnitCode = (string)dr["testBusinUnitCode"];
+                                        OperatorCode = (string)dr["testOperatorCode"];
+                                        IssuerNUIS = (string)dr["testissuerNUIS"];
+                                        CertificatePath = (string)dr["testCertificatePath"];
+                                        CertificatePassword = (string)dr["testCertificatePassword"];
+                                        CertificateData = (string)dr["testCertificateData"];
+                                        ApiUsername = (string)dr["testFiskApiUsername"];
+                                        ApiPassword = (string)dr["testFiskApiPassword"];
+                                        url = (string)dr["testFiskCompanyUrl"];
+                                    }
+                                    else
+                                    {
+                                        BusinUnitCode = (string)dr["BusinUnitCode"];
+                                        OperatorCode = (string)dr["OperatorCode"];
+                                        IssuerNUIS = (string)dr["issuerNUIS"];
+                                        CertificatePath = (string)dr["CertificatePath"];
+                                        CertificatePassword = (string)dr["CertificatePassword"];
+                                        CertificateData = (string)dr["CertificateData"];
+                                        ApiUsername = (string)dr["FiskApiUsername"];
+                                        ApiPassword = (string)dr["FiskApiPassword"];
+                                        url = (string)dr["FiskCompanyUrl"];
 
-                            IsServiceTest = (int)reader["IsServiceTest"] == 1 ? true : false;
-                            fiscCompany = (string)reader["fiscCompany"];
+                                    }
+                                    ServerDatetime = (string)dr["ServerDatetime"];
+                                    IsServiceTest = (int)dr["IsServiceTest"] == 1 ? true : false;
+                                    fiscCompany = (string)dr["fiscCompany"];
 
+                                }
+                            }
                         }
                     }
 
@@ -70,6 +82,8 @@ namespace EsgFiskDll.Classes
         public string ApiPassword { get; set; }
         public bool IsServiceTest { get; set; }
         public string fiscCompany { get; set; }
+
+        public string ServerDatetime { get; set; }
 
     }
 
