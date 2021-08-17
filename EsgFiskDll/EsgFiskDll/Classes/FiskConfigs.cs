@@ -35,9 +35,9 @@ namespace EsgFiskDll.Classes
                                         BusinUnitCode = (string)dr["testBusinUnitCode"];
                                         OperatorCode = (string)dr["testOperatorCode"];
                                         IssuerNUIS = (string)dr["testissuerNUIS"];
-                                        CertificatePath = (string)dr["testCertificatePath"];
                                         CertificatePassword = (string)dr["testCertificatePassword"];
-                                        CertificateData = (string)dr["testCertificateData"];
+                                        CertificatePath = dr.IsNull("testCertificatePath") ? null : (string)dr["testCertificatePath"];
+                                        CertificateData = dr.IsNull("testCertificateData") ? null : (string)dr["testCertificateData"];
                                         ApiUsername = (string)dr["testFiskApiUsername"];
                                         ApiPassword = (string)dr["testFiskApiPassword"];
                                         url = (string)dr["testFiskCompanyUrl"];
@@ -47,9 +47,9 @@ namespace EsgFiskDll.Classes
                                         BusinUnitCode = (string)dr["BusinUnitCode"];
                                         OperatorCode = (string)dr["OperatorCode"];
                                         IssuerNUIS = (string)dr["issuerNUIS"];
-                                        CertificatePath = (string)dr["CertificatePath"];
+                                        CertificatePath = dr.IsNull("CertificatePath")? null:(string)dr["CertificatePath"] ;
+                                        CertificateData = dr.IsNull("CertificateData") ? null : (string)dr["CertificateData"];
                                         CertificatePassword = (string)dr["CertificatePassword"];
-                                        CertificateData = (string)dr["CertificateData"];
                                         ApiUsername = (string)dr["FiskApiUsername"];
                                         ApiPassword = (string)dr["FiskApiPassword"];
                                         url = (string)dr["FiskCompanyUrl"];

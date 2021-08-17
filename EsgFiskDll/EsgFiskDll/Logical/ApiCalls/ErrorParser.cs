@@ -43,6 +43,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                 @"  ""ErrorMessage"": """ + ErrorMessage + @"""," + "\n" +
                 @"  ""requestUUID"": """ + requestUUID + @"""," + "\n" +
                 @"  ""responseUUID"": """ + responseUUID + @"""," + "\n" +
+                @"  ""content"": """ + resp.Content + @"""," + "\n" +
                 @"}";
 
                 return errorString;
