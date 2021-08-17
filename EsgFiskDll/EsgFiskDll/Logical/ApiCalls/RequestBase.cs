@@ -18,6 +18,7 @@ namespace EsgFiskDll.Logical.ApiCalls
     {
         public string CertificatePassword { get; set; }
         public string CertificatePath { get; set; }
+        public string CertificateData { get; set; }
     }
 
     public class RequestBase
@@ -26,7 +27,7 @@ namespace EsgFiskDll.Logical.ApiCalls
         {
 
             Header = new reqHeader { SendDateTime = System.DateTime.Now.ToString("o") };
-            Certificate = new certificate { CertificatePassword = Configs.CertificatePassword, CertificatePath = Configs.CertificatePath };
+            Certificate = new certificate { CertificatePassword = Configs.CertificatePassword, CertificatePath = Configs.CertificatePath, CertificateData = null};
             IsServiceTest = Configs.IsServiceTest;
                 
         }
