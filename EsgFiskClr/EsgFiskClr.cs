@@ -22,10 +22,11 @@ public partial class EsgFisk
                 return response;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return "600 -" + ex.Message;
             }
+
         }
     }
     [Microsoft.SqlServer.Server.SqlFunction(SystemDataAccess = SystemDataAccessKind.Read, DataAccess = DataAccessKind.Read)]
@@ -130,5 +131,15 @@ public partial class EsgFisk
                 return "600 -" + ex.Message;
             }
         }
+    }
+
+    [Microsoft.SqlServer.Server.SqlFunction]
+    public static SqlBytes GenerateQrCode(SqlString QrContent)
+    {
+
+        EsgTools Tools = new EsgTools();
+
+        return new SqlBytes(Tools.GenerateQrCode(QrContent.ToString()));
+
     }
 }

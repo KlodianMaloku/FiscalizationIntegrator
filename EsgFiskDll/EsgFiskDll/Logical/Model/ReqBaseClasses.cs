@@ -30,6 +30,75 @@ namespace EsgFiskDll.Logical
 
     }
 
+    internal class note
+    {
+        public string IIC { get; set; }
+        public string IICSignature { get; set; }
+        public string FIC { get; set; }
+        public string IssueDateTime { get; set;}
+        public string UUID { get; set; }
+        public string Currency { get; set; }
+        public string OperatorCode { get; set; }
+        public string BusinessUnitCode { get; set; }
+        public string SoftwareCode { get; set; }
+    }
+
+    internal class EndpointID
+    {
+        public string Text { get; set; }
+    }
+    internal class PartyName
+    {
+        public string Name { get; set; }
+    }
+    internal class Country
+    {
+        public string IdentificationCode { get; set; }
+    }
+    internal class PostalAddress
+    {
+        public string Streetname { get; set; }
+        public string CityName { get; set; }
+        public Country Country { get; set; }
+    }
+    internal class TaxScheme
+    {
+        public string ID { get; set; }
+    }
+    internal class PartyTaxScheme
+    {
+        public string CompanyID { get; set; }
+        public TaxScheme TaxScheme { get; set; }
+
+    }
+    internal class PartyLegalEntity
+    {
+        public string RegistrationName { get; set; }
+        public string CompanyID { get; set; }
+    }
+    internal class Party
+    {
+        public EndpointID EndpointID { get; set; }
+        public PartyName PartyName { get; set; }
+        public PostalAddress PostalAddress { get; set; }
+        public PartyTaxScheme PartyTaxScheme { get; set; }
+        public PartyLegalEntity PartyLegalEntity { get; set; }
+    }
+    internal class AccountingSupplierParty
+    {
+        public Party Party { get; set; }
+    }
+    internal class UblInvoice
+    {
+        public string ProfileID { get; set; }
+        public string ID { get; set; }
+        public string IssueDate { get; set; }
+        public string DueDate { get; set; }
+        public string InvoiceTypeCode { get; set; }
+        public note Note { get; set; }
+        public string DocumentCurrencyCode { get; set; }
+
+    }
     internal class Invoice
     {
         public string BusinUnitCode { get; set; }
@@ -51,10 +120,22 @@ namespace EsgFiskDll.Logical
         public double TotVATAmt { get; set; }
         public bool TotVATAmtSpecified { get; set; }
         public string TypeOfInv { get; set; }
+        public Buyer Buyer { get; set; }
         public List<Item> Items { get; set; }
         public List<PayMethod> PayMethods { get; set; }
         public List<SameTax> SameTaxes { get; set; }
         public Seller Seller { get; set; }
+    }
+
+    internal class Buyer
+    {
+        public string Address { get; set; }
+        public string Country { get; set; }
+        public bool CountrySpecified { get; set; }
+        public string IDNum { get; set; }
+        public string IDType { get; set; }
+        public string Name { get; set; }
+        public string Town { get; set; }
     }
 
     internal class Item
@@ -140,7 +221,8 @@ namespace EsgFiskDll.Logical
             Certificate = new certificate
             {
                 CertificatePassword = configs.CertificatePassword,
-                CertificatePath = configs.CertificatePath
+                CertificatePath = configs.CertificatePath,
+                CertificateData = configs.CertificateData
             };
 
             IsServiceTest = configs.IsServiceTest;

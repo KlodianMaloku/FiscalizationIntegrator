@@ -9,7 +9,8 @@ Post-Deployment Script Template
 			   SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-
+--in case of conflicts with GAC use this alter script for the specific dll
+--ALTER ASSEMBLY [System.Runtime.Serialization] FROM 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.Serialization.dll'
 
 --To avoid having to guess which folder to import from, run this query:
 --select * from sys.dm_clr_properties
@@ -43,7 +44,9 @@ go
 IF EXISTS (SELECT name FROM sysobjects WHERE name = 'GetTaxpayers')
    DROP function GetTaxpayers
 go
-
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'GenerateQrCode')
+   DROP function GenerateQrCode
+go
 IF EXISTS (SELECT name FROM sys.assemblies WHERE name = 'EsgFiskClr')
    DROP ASSEMBLY EsgFiskClr
 GO
@@ -56,7 +59,10 @@ CREATE ASSEMBLY [System.Runtime.Serialization]
 FROM 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.Serialization.dll'
 WITH PERMISSION_SET = UNSAFE
 GO
-
+CREATE ASSEMBLY [System.Runtime.Serialization]
+FROM 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.Serialization.dll'
+WITH PERMISSION_SET = UNSAFE
+GO
 IF EXISTS (SELECT name FROM sys.assemblies WHERE name = 'system.web')
    DROP ASSEMBLY [system.web]
 GO
@@ -91,6 +97,49 @@ create assembly [microsoft.csharp]
 from 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\microsoft.csharp.dll'
 with permission_set = UNSAFE;
 
+GO
+
+GO
+IF EXISTS (SELECT name FROM sys.assemblies WHERE name = 'presentationcore')
+   DROP ASSEMBLY [presentationcore]
+GO
+create assembly [presentationcore]
+from 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\wpf\presentationcore.dll'
+with permission_set = UNSAFE;
+GO
+IF EXISTS (SELECT name FROM sys.assemblies WHERE name = 'presentationframework')
+   DROP ASSEMBLY [presentationframework]
+GO
+create assembly [presentationframework]
+from 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\wpf\presentationframework.dll'
+with permission_set = UNSAFE;
+GO
+IF EXISTS (SELECT name FROM sys.assemblies WHERE name = 'windowsbase')
+   DROP ASSEMBLY [windowsbase]
+GO
+create assembly [windowsbase]
+from 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\wpf\windowsbase.dll'
+with permission_set = UNSAFE;
+
+go
+
+IF EXISTS (SELECT name FROM sys.assemblies WHERE name = 'uiautomationprovider')
+   DROP ASSEMBLY uiautomationprovider
+GO
+create assembly uiautomationprovider
+from 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\wpf\uiautomationprovider.dll'
+with permission_set = UNSAFE;
+
+go
+
+IF EXISTS (SELECT name FROM sys.assemblies WHERE name = 'system.windows.input.manipulations')
+   DROP ASSEMBLY [system.windows.input.manipulations]
+GO
+create assembly [system.windows.input.manipulations]
+from 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\wpf\system.windows.input.manipulations.dll'
+with permission_set = UNSAFE;
+
+go
 
 --IF EXISTS (SELECT name FROM sysobjects WHERE name = 'RegisterCashDesk')
 --   DROP function RegisterCashDesk
@@ -211,3 +260,19 @@ AS
 go 
 
 PRINT N'Perfunduar me sukses [dbo].[RegisterInvoice]...';
+
+go
+
+PRINT N'Duke Krijuar [dbo].[RegisterInvoice]...';
+go 
+CREATE FUNCTION [dbo].GenerateQrCode
+(
+	@QrContent NVARCHAR (4000)
+)
+RETURNS NVARCHAR (4000)
+AS
+ EXTERNAL NAME [EsgFiskClr].[EsgTools].GenerateQrCode
+
+go 
+
+PRINT N'Perfunduar me sukses [dbo].[GenerateQrCode]...';

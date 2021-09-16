@@ -31,7 +31,7 @@ namespace EsgFiskDll.Logical.ApiCalls
             }
             catch(Exception ex)
             {
-                throw new Exception("Gatim ne dergim te kerkeses: " + ex.Message.ToString());
+                throw new Exception("Gabim ne dergim te kerkeses: " + ex.Message.ToString());
             }
             
         }

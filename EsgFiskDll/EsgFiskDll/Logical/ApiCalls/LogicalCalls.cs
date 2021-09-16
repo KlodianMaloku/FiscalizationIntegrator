@@ -295,7 +295,22 @@ namespace EsgFiskDll.Logical.ApiCalls
                         sda.Fill(ds);
                         if (ds.Tables.Count != 0)
                         {
-                            if (ds.Tables[0].Rows.Count != 0)
+
+                            if (ds.Tables[5].Rows.Count != 0)
+                            {
+                                foreach (DataRow dr in ds.Tables[5].Rows)
+                                {
+                                    if (dr["IsValidNIPT"].ToString() == "0")
+                                    {
+                                        if (dr["IsBussines"].ToString() == "1")
+                                        {
+                                            throw new Exception("Esg Error : Fatura nuk u fiskalizuar per shkakt te niptit te klientit jo te sakte.");
+                                        }
+                                    }
+                                }
+                            }
+
+                                            if (ds.Tables[0].Rows.Count != 0)
                             {
                                 body.Invoice = new Invoice();
 
@@ -377,18 +392,60 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 }
                             }
 
-                            TaxPayer tp = GetTaxpayers(Conn, Configs, Configs.IssuerNUIS, UserId);
-
-                            body.Invoice.Seller = new Seller
+                            //TaxPayer tp = GetTaxpayers(Conn, Configs, Configs.IssuerNUIS, UserId);
+                            if (ds.Tables[4].Rows.Count != 0)
                             {
-                                Address = tp.address,
-                                Country = "ALB",
-                                CountrySpecified = true,
-                                IDNum = tp.tin,
-                                IDType = "NUIS",
-                                Name = tp.name,
-                                Town = tp.town
-                            };
+                                foreach (DataRow dr in ds.Tables[4].Rows)
+                                {
+                                    body.Invoice.Seller = new Seller
+                                    {
+                                        Address = (string)dr["Address"],
+                                        Country = (string)dr["Country"],
+                                        CountrySpecified = true,
+                                        IDNum = (string)dr["IDNum"],
+                                        IDType = (string)dr["IDType"],
+                                        Name = (string)dr["Name"],
+                                        Town = (string)dr["Town"]
+                                    };
+                                }
+                            }
+                                
+                            if(ds.Tables[5].Rows.Count != 0)
+                            {
+                                foreach (DataRow dr in ds.Tables[5].Rows)
+                                {
+                                    if(dr["IsValidNIPT"].ToString() == "1")
+                                    {
+                                        if(dr["GetBuyerOnline"].ToString() == "1")
+                                        {
+                                            TaxPayer tp = GetTaxpayers(Conn, Configs, Configs.IssuerNUIS, UserId);
+                                            body.Invoice.Buyer = new Buyer
+                                            {
+                                                Address = tp.address,
+                                                Country = "",
+                                                CountrySpecified = false,
+                                                IDNum = tp.tin,
+                                                IDType ="NUIS" ,
+                                                Name =tp.name,
+                                                Town = tp.town
+                                            };
+                                        }
+                                        else
+                                        {
+                                            body.Invoice.Buyer = new Buyer
+                                            {
+                                                Address = (string)dr["Address"],
+                                                Country = (string)dr["Country"],
+                                                CountrySpecified = true,
+                                                IDNum = (string)dr["IDNum"],
+                                                IDType = (string)dr["IDType"],
+                                                Name = (string)dr["Name"],
+                                                Town = (string)dr["Town"]
+                                            };
+                                        }
+                                    }
+                                }
+                            }
 
                         }
                     }
