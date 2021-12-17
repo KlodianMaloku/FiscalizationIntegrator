@@ -11,6 +11,7 @@ namespace EsgFiskDll.Logical.ApiCalls
     {
         public static string ParseError(IRestResponse<T> resp)
         {
+
             string EsgMessage = "";
             string ErrorMessage = "";
             string code = "";

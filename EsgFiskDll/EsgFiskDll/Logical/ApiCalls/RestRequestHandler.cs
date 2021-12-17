@@ -17,9 +17,8 @@ namespace EsgFiskDll.Logical.ApiCalls
         {
             try
             {
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
-                                     | SecurityProtocolType.Tls11
-                                     | SecurityProtocolType.Tls12;
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 restRequest.AddHeader("Content-Type", "application/json");
                 restRequest.AddHeader("Accept", "*/*");
                 restRequest.AddHeader("Connection", "keep-alive");
@@ -31,7 +30,7 @@ namespace EsgFiskDll.Logical.ApiCalls
             }
             catch(Exception ex)
             {
-                throw new Exception("Gatim ne dergim te kerkeses: " + ex.Message.ToString());
+                throw new Exception("Gabim ne dergim te kerkeses: " + ex.Message.ToString());
             }
             
         }

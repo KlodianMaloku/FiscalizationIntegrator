@@ -32,7 +32,7 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc RegisterCashDeskCaller = new EsgFiskDll.EsgFisc(conn,1);
-                    MessageBox.Show(RegisterCashDeskCaller.registerCashDesk(2));
+                    MessageBox.Show(RegisterCashDeskCaller.registerCashDesk(1));
 
                 }
                 catch(SqlException ex)
@@ -56,7 +56,7 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc RegisterCashDeskCaller = new EsgFiskDll.EsgFisc(conn, 1);
-                    MessageBox.Show(RegisterCashDeskCaller.registerCashDeposit(1));
+                    MessageBox.Show(RegisterCashDeskCaller.registerCashDeposit(3));
 
                 }
                 catch (SqlException ex)
@@ -79,7 +79,7 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc generateIIC = new EsgFiskDll.EsgFisc(conn, 1);
-                    MessageBox.Show(generateIIC.GenerateIICType(3346198));
+                    MessageBox.Show(generateIIC.GenerateIICType(3475148));
 
                 }
                 catch (SqlException ex)
@@ -102,7 +102,7 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc generateIICQR = new EsgFiskDll.EsgFisc(conn, 1);
-                    MessageBox.Show(generateIICQR.CalculateQRCode(3346198));
+                    MessageBox.Show(generateIICQR.CalculateQRCode(1399890));
 
                 }
                 catch (SqlException ex)
@@ -148,7 +148,7 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc doREgisterIvoice = new EsgFiskDll.EsgFisc(conn, 1);
-                    MessageBox.Show(doREgisterIvoice.registerEInvoice(3346198));
+                    MessageBox.Show(doREgisterIvoice.registerEInvoice(3475148));
                 }
                 catch (SqlException ex)
                 {
@@ -159,6 +159,22 @@ namespace TestForm
                     conn.Close();
                     conn.Dispose();
                 }
+            }
+        }
+
+        private void cmdDergoEsl_Click(object sender, EventArgs e)
+        {
+            using SqlConnection conn = new SqlConnection(this.txtSqlConnection.Text);
+            conn.Open();
+            try
+            {
+                EsgEslDll.EslOps eslOps = new EsgEslDll.EslOps(conn);
+                MessageBox.Show(eslOps.SendItems());
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

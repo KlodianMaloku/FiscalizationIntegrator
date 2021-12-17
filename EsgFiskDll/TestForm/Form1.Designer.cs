@@ -37,13 +37,15 @@ namespace TestForm
             this.cmdCalculateIICQR = new System.Windows.Forms.Button();
             this.cmdGetTaxPayer = new System.Windows.Forms.Button();
             this.cmdRegisterInvoice = new System.Windows.Forms.Button();
+            this.cmdDergoEsl = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdRegisterCashDesk
             // 
-            this.cmdRegisterCashDesk.Location = new System.Drawing.Point(49, 84);
+            this.cmdRegisterCashDesk.Location = new System.Drawing.Point(27, 40);
+            this.cmdRegisterCashDesk.Margin = new System.Windows.Forms.Padding(1);
             this.cmdRegisterCashDesk.Name = "cmdRegisterCashDesk";
-            this.cmdRegisterCashDesk.Size = new System.Drawing.Size(260, 58);
+            this.cmdRegisterCashDesk.Size = new System.Drawing.Size(140, 27);
             this.cmdRegisterCashDesk.TabIndex = 0;
             this.cmdRegisterCashDesk.Text = "Register CashDesk";
             this.cmdRegisterCashDesk.UseVisualStyleBackColor = true;
@@ -52,26 +54,29 @@ namespace TestForm
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(41, 8);
+            this.label1.Location = new System.Drawing.Point(22, 4);
+            this.label1.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(177, 32);
+            this.label1.Size = new System.Drawing.Size(88, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "Sql Connection";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // txtSqlConnection
             // 
-            this.txtSqlConnection.Location = new System.Drawing.Point(213, 6);
+            this.txtSqlConnection.Location = new System.Drawing.Point(115, 3);
+            this.txtSqlConnection.Margin = new System.Windows.Forms.Padding(1);
             this.txtSqlConnection.Name = "txtSqlConnection";
-            this.txtSqlConnection.Size = new System.Drawing.Size(766, 39);
+            this.txtSqlConnection.Size = new System.Drawing.Size(414, 23);
             this.txtSqlConnection.TabIndex = 2;
-            this.txtSqlConnection.Text = "Server=localhost; Database = MEGATEK; User Id = sa; Password = klodi;";
+            this.txtSqlConnection.Text = "Server=localhost; Database = quick_pos; User Id = sa; Password = klodi;";
             // 
             // cmdRegisterCashDeposit
             // 
-            this.cmdRegisterCashDeposit.Location = new System.Drawing.Point(49, 172);
+            this.cmdRegisterCashDeposit.Location = new System.Drawing.Point(27, 80);
+            this.cmdRegisterCashDeposit.Margin = new System.Windows.Forms.Padding(1);
             this.cmdRegisterCashDeposit.Name = "cmdRegisterCashDeposit";
-            this.cmdRegisterCashDeposit.Size = new System.Drawing.Size(259, 60);
+            this.cmdRegisterCashDeposit.Size = new System.Drawing.Size(139, 28);
             this.cmdRegisterCashDeposit.TabIndex = 3;
             this.cmdRegisterCashDeposit.Text = "Register CashDeposit";
             this.cmdRegisterCashDeposit.UseVisualStyleBackColor = true;
@@ -79,9 +84,10 @@ namespace TestForm
             // 
             // cmdGenerateIICType
             // 
-            this.cmdGenerateIICType.Location = new System.Drawing.Point(49, 265);
+            this.cmdGenerateIICType.Location = new System.Drawing.Point(27, 124);
+            this.cmdGenerateIICType.Margin = new System.Windows.Forms.Padding(1);
             this.cmdGenerateIICType.Name = "cmdGenerateIICType";
-            this.cmdGenerateIICType.Size = new System.Drawing.Size(259, 60);
+            this.cmdGenerateIICType.Size = new System.Drawing.Size(139, 28);
             this.cmdGenerateIICType.TabIndex = 4;
             this.cmdGenerateIICType.Text = "Generate IICType";
             this.cmdGenerateIICType.UseVisualStyleBackColor = true;
@@ -89,9 +95,10 @@ namespace TestForm
             // 
             // cmdCalculateIICQR
             // 
-            this.cmdCalculateIICQR.Location = new System.Drawing.Point(50, 353);
+            this.cmdCalculateIICQR.Location = new System.Drawing.Point(27, 166);
+            this.cmdCalculateIICQR.Margin = new System.Windows.Forms.Padding(1);
             this.cmdCalculateIICQR.Name = "cmdCalculateIICQR";
-            this.cmdCalculateIICQR.Size = new System.Drawing.Size(259, 60);
+            this.cmdCalculateIICQR.Size = new System.Drawing.Size(139, 28);
             this.cmdCalculateIICQR.TabIndex = 5;
             this.cmdCalculateIICQR.Text = "Calculate IICQR";
             this.cmdCalculateIICQR.UseVisualStyleBackColor = true;
@@ -99,9 +106,10 @@ namespace TestForm
             // 
             // cmdGetTaxPayer
             // 
-            this.cmdGetTaxPayer.Location = new System.Drawing.Point(49, 440);
+            this.cmdGetTaxPayer.Location = new System.Drawing.Point(27, 206);
+            this.cmdGetTaxPayer.Margin = new System.Windows.Forms.Padding(1);
             this.cmdGetTaxPayer.Name = "cmdGetTaxPayer";
-            this.cmdGetTaxPayer.Size = new System.Drawing.Size(259, 60);
+            this.cmdGetTaxPayer.Size = new System.Drawing.Size(139, 28);
             this.cmdGetTaxPayer.TabIndex = 6;
             this.cmdGetTaxPayer.Text = "Get TaxPayer";
             this.cmdGetTaxPayer.UseVisualStyleBackColor = true;
@@ -109,19 +117,31 @@ namespace TestForm
             // 
             // cmdRegisterInvoice
             // 
-            this.cmdRegisterInvoice.Location = new System.Drawing.Point(705, 83);
+            this.cmdRegisterInvoice.Location = new System.Drawing.Point(379, 39);
+            this.cmdRegisterInvoice.Margin = new System.Windows.Forms.Padding(1);
             this.cmdRegisterInvoice.Name = "cmdRegisterInvoice";
-            this.cmdRegisterInvoice.Size = new System.Drawing.Size(259, 60);
+            this.cmdRegisterInvoice.Size = new System.Drawing.Size(139, 28);
             this.cmdRegisterInvoice.TabIndex = 7;
             this.cmdRegisterInvoice.Text = "Register Invoice";
             this.cmdRegisterInvoice.UseVisualStyleBackColor = true;
             this.cmdRegisterInvoice.Click += new System.EventHandler(this.cmdRegisterInvoice_Click);
             // 
+            // cmdDergoEsl
+            // 
+            this.cmdDergoEsl.Location = new System.Drawing.Point(381, 78);
+            this.cmdDergoEsl.Name = "cmdDergoEsl";
+            this.cmdDergoEsl.Size = new System.Drawing.Size(136, 29);
+            this.cmdDergoEsl.TabIndex = 8;
+            this.cmdDergoEsl.Text = "Dergo Esl";
+            this.cmdDergoEsl.UseVisualStyleBackColor = true;
+            this.cmdDergoEsl.Click += new System.EventHandler(this.cmdDergoEsl_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1000, 602);
+            this.ClientSize = new System.Drawing.Size(538, 282);
+            this.Controls.Add(this.cmdDergoEsl);
             this.Controls.Add(this.cmdRegisterInvoice);
             this.Controls.Add(this.cmdGetTaxPayer);
             this.Controls.Add(this.cmdCalculateIICQR);
@@ -130,6 +150,7 @@ namespace TestForm
             this.Controls.Add(this.txtSqlConnection);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmdRegisterCashDesk);
+            this.Margin = new System.Windows.Forms.Padding(1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -147,6 +168,7 @@ namespace TestForm
         private System.Windows.Forms.Button cmdCalculateIICQR;
         private System.Windows.Forms.Button cmdGetTaxPayer;
         private System.Windows.Forms.Button cmdRegisterInvoice;
+        private System.Windows.Forms.Button cmdDergoEsl;
     }
 }
 
