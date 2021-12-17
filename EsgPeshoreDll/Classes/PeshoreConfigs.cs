@@ -32,7 +32,7 @@ namespace EsgPeshoreDll.Classes
                                 txtdata_path = (string)dr["ExportPath_txtdata"];
                                 prcdata_path = (string)dr["ExportPath_prcdata"];
 
-                                EtiketePeshePrefix = (string)dr["EtiketePshePrefix"];
+                                EtiketePeshePrefix = (string)dr["EtiketePeshePrefix"];
                                 EtiketeCopePrefix = (string)dr["EtiketeCopePrefix"];
 
                             }
