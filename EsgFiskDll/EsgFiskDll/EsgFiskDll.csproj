@@ -66,6 +66,12 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UblSharp, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UblSharp.1.1.1\lib\net45\UblSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UblSharp.XmlSerializers, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UblSharp.1.1.1\lib\net45\UblSharp.XmlSerializers.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>

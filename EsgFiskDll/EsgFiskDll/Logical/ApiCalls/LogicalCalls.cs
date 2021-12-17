@@ -95,7 +95,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 body.CashDeposit = new CashDeposit()
                                 {
                                     CashAmt = (double)ds.Tables[0].Rows[0]["Amt"],
-                                    ChangeDateTime = Configs.ServerDatetime,
+                                    ChangeDateTime = body.Header.SendDateTime,
                                     IssuerNUIS = Configs.IssuerNUIS,
                                     TCRCode = ds.Tables[0].Rows[0]["TCRCode"].ToString(),
                                     Operation = ds.Tables[0].Rows[0]["Operation"].ToString()
@@ -110,15 +110,15 @@ namespace EsgFiskDll.Logical.ApiCalls
                 IRestClient client = new RestClient(url);
                 IRestRequest request = new RestRequest(Method.POST);
 
-                IRestResponse<RegisterCashDepositReponse> resp = RestRequestHandler<RegisterCashDepositReq, RegisterCashDepositReponse>.MakeResquest(client, request, body, Configs);
+                IRestResponse<RegisterCashDeskResponseV2> resp = RestRequestHandler<RegisterCashDepositReq, RegisterCashDeskResponseV2>.MakeResquest(client, request, body, Configs);
 
                 if (resp.IsSuccessful)
                 {
-                    return "100 - " + resp.Data.fcdc;
+                    return "100 - " + resp.Data.registerCashDepositResponse.fcdc;
                 }
                 else
                 {
-                    return ErrorParser<RegisterCashDepositReponse>.ParseError(resp);
+                    return ErrorParser<RegisterCashDeskResponseV2>.ParseError(resp);
                 }
 
             }
@@ -151,26 +151,30 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 body.TcrCode = ds.Tables[0].Rows[0]["TcrCode"].ToString();
                                 body.InvNum = ds.Tables[0].Rows[0]["InvNum"].ToString();
                                 body.TotPrice = double.Parse(ds.Tables[0].Rows[0]["TotPrice"].ToString());
+
+                                string url = Configs.url + "/Helper/GenerateIICType";
+
+                                IRestClient client = new RestClient(url);
+                                IRestRequest request = new RestRequest(Method.POST);
+
+                                IRestResponse<GenerateIICTypeResponse> resp =
+                                    RestRequestHandler<GenerateIICTYPEReq, GenerateIICTypeResponse>.MakeResquest(client,
+                                        request, body, Configs);
+
+                                if (resp.IsSuccessful)
+                                {
+                                    return "100 - " + resp.Data.iic + "@------@" + resp.Data.iicSignature;
+                                }
+                                else
+                                {
+                                    return ErrorParser<GenerateIICTypeResponse>.ParseError(resp);
+                                }
                             }
                         }
+                        return "100 - " + "Not for Fiscalization@------@Not for fiscalization";
                     }
                 }
 
-                string url = Configs.url + "/Helper/GenerateIICType";
-
-                IRestClient client = new RestClient(url);
-                IRestRequest request = new RestRequest(Method.POST);
-
-                IRestResponse<GenerateIICTypeResponse> resp = RestRequestHandler<GenerateIICTYPEReq, GenerateIICTypeResponse>.MakeResquest(client, request, body, Configs);
-
-                if (resp.IsSuccessful)
-                {
-                    return "100 - " + resp.Data.iic + "@------@" + resp.Data.iicSignature;
-                }
-                else
-                {
-                    return ErrorParser<GenerateIICTypeResponse>.ParseError(resp);
-                }
 
             }
             catch (SqlException ex)
@@ -203,32 +207,36 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 body.TcrCode = ds.Tables[0].Rows[0]["TcrCode"].ToString();
                                 body.InvOrdNum = int.Parse(ds.Tables[0].Rows[0]["InvNum"].ToString());
                                 body.TotPrice = double.Parse(ds.Tables[0].Rows[0]["TotPrice"].ToString());
+
+                                string url = Configs.url + "/Helper/CalculateQRCode";
+
+                                IRestClient client = new RestClient(url);
+                                IRestRequest request = new RestRequest(Method.POST);
+
+                                request.AddHeader("Content-Type", "application/json");
+                                request.AddHeader("Accept", "*/*");
+                                request.AddHeader("Connection", "keep-alive");
+                                request.AddJsonBody(body);
+                                HttpBasicAuthenticator authenticator = new HttpBasicAuthenticator(Configs.ApiUsername, Configs.ApiPassword);
+                                authenticator.Authenticate(client, request);
+                                IRestResponse resp = client.Post(request);
+
+                                if (resp.IsSuccessful)
+                                {
+                                    return "100 - " + resp.Content.ToString();
+                                }
+                                else
+                                {
+                                    return "400 - Gabim : " + resp.ErrorMessage + "     StatusCode:" + resp.StatusCode + "   Content : " + resp.Content;
+                                }
+
                             }
                         }
+
+                        return "100 - " + "Not for fiscalization";
                     }
                 }
 
-                string url = Configs.url + "/Helper/CalculateQRCode";
-
-                IRestClient client = new RestClient(url);
-                IRestRequest request = new RestRequest(Method.POST);
-
-                request.AddHeader("Content-Type", "application/json");
-                request.AddHeader("Accept", "*/*");
-                request.AddHeader("Connection", "keep-alive");
-                request.AddJsonBody(body);
-                HttpBasicAuthenticator authenticator = new HttpBasicAuthenticator(Configs.ApiUsername, Configs.ApiPassword);
-                authenticator.Authenticate(client, request);
-                IRestResponse resp = client.Post(request);
-
-                if (resp.IsSuccessful)
-                {
-                    return "100 - " + resp.Content.ToString();
-                }
-                else
-                {
-                    return "400 - Gabim : " + resp.ErrorMessage + "     StatusCode:" + resp.StatusCode + "   Content : " + resp.Content;
-                }
 
             }
             catch (SqlException ex)
@@ -296,6 +304,13 @@ namespace EsgFiskDll.Logical.ApiCalls
                         if (ds.Tables.Count != 0)
                         {
 
+                            if (ds.Tables[0].Rows.Count == 0)
+                            {
+
+                                return "100- Not for Fiscalization";
+
+                            }
+
                             if (ds.Tables[5].Rows.Count != 0)
                             {
                                 foreach (DataRow dr in ds.Tables[5].Rows)
@@ -310,7 +325,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 }
                             }
 
-                                            if (ds.Tables[0].Rows.Count != 0)
+                            if (ds.Tables[0].Rows.Count != 0)
                             {
                                 body.Invoice = new Invoice();
 
@@ -323,7 +338,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 body.Invoice.IsIssuerInVAT = (int)ds.Tables[0].Rows[0]["IsIssuerInVAT"] == 1;
                                 body.Invoice.IsReverseCharge = (int)ds.Tables[0].Rows[0]["IsReverseCharge"] == 1;
                                 body.Invoice.IsSimplifiedInv = (int)ds.Tables[0].Rows[0]["IsSimplifiedInv"] == 1;
-                                body.Invoice.IssueDateTime = body.Header.SendDateTime; //ds.Tables[0].Rows[0]["IssueDateTime"].ToString();
+                                body.Invoice.IssueDateTime = body.Header.SendDateTime;//   ds.Tables[0].Rows[0]["IssueDateTime"].ToString();
                                 body.Invoice.OperatorCode = (string)ds.Tables[0].Rows[0]["Operatorcode"];
                                 body.Invoice.PayDeadline = body.Header.SendDateTime;
                                 body.Invoice.PayDeadlineSpecified = (int)ds.Tables[0].Rows[0]["PayDeadLineSpecified"] == 1;
@@ -447,26 +462,31 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 }
                             }
 
+                            string url = Configs.url + "/Invoice/RegisterInvoice";
+
+                            IRestClient client = new RestClient(url);
+                            IRestRequest request = new RestRequest(Method.POST);
+
+                            IRestResponse<registerInvoiceReponseV2> resp = RestRequestHandler<RegisterInvoiceReq, registerInvoiceReponseV2>.MakeResquest(client, request, body, Configs);
+
+                            if (resp.IsSuccessful)
+                            {
+                                return "100 - " + resp.Data.registerInvoiceResponse.fic.ToString();
+                            }
+                            else
+                            {
+                                return ErrorParser<registerInvoiceReponseV2>.ParseError(resp);
+                            }
+
                         }
-                    }
+
+                        return "100 - Not for fiscalization..";
+
+                    }                
+                    
                 }
 
 
-                string url = Configs.url + "/Invoice/RegisterInvoice";
-
-                IRestClient client = new RestClient(url);
-                IRestRequest request = new RestRequest(Method.POST);
-
-                IRestResponse<RegisterInvoiceReponse> resp = RestRequestHandler<RegisterInvoiceReq, RegisterInvoiceReponse>.MakeResquest(client, request, body, Configs);
-
-                if (resp.IsSuccessful)
-                {
-                    return "100 - " + resp.Data.fic;
-                }
-                else
-                {
-                    return ErrorParser<RegisterInvoiceReponse>.ParseError(resp);
-                }
 
             }
             catch (SqlException ex)

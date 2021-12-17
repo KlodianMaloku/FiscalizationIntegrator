@@ -77,6 +77,20 @@
       <IsModelAware>True</IsModelAware>
       <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
     </ProjectReference>
+    <ProjectReference Include="..\EsgEslDll\EsgEslDll\EsgEslDll.csproj">
+      <Name>EsgEslDll</Name>
+      <Project>{f98c2c7d-7af5-4798-bce3-0df91c30564a}</Project>
+      <Private>True</Private>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
+    </ProjectReference>
+    <ProjectReference Include="..\EsgPeshoreDll\EsgPeshoreDll.csproj">
+      <Name>EsgPeshoreDll</Name>
+      <Project>{f22017e0-dcb2-4385-a6b4-c0620e4ebb1d}</Project>
+      <Private>True</Private>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="RegisterClrFunctions.sql" />

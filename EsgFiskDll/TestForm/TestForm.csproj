@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\EsgEslDll\EsgEslDll\EsgEslDll.csproj" />
     <ProjectReference Include="..\EsgFiskDll\EsgFiskDll.csproj" />
   </ItemGroup>
 
