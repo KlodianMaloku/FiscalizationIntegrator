@@ -169,13 +169,20 @@ namespace TestForm
             try
             {
                 EsgEslDll.EslOps eslOps = new EsgEslDll.EslOps(conn);
-                MessageBox.Show(eslOps.SendItems());
+                //MessageBox.Show(eslOps.SendItems());
             }
             catch (Exception)
             {
 
                 throw;
             }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            int i = 0;
+            i++;
+            MessageBox.Show(i.ToString());
         }
     }
 }

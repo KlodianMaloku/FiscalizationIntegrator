@@ -38,6 +38,7 @@ namespace TestForm
             this.cmdGetTaxPayer = new System.Windows.Forms.Button();
             this.cmdRegisterInvoice = new System.Windows.Forms.Button();
             this.cmdDergoEsl = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdRegisterCashDesk
@@ -136,11 +137,22 @@ namespace TestForm
             this.cmdDergoEsl.UseVisualStyleBackColor = true;
             this.cmdDergoEsl.Click += new System.EventHandler(this.cmdDergoEsl_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(370, 197);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(538, 282);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.cmdDergoEsl);
             this.Controls.Add(this.cmdRegisterInvoice);
             this.Controls.Add(this.cmdGetTaxPayer);
@@ -169,6 +181,7 @@ namespace TestForm
         private System.Windows.Forms.Button cmdGetTaxPayer;
         private System.Windows.Forms.Button cmdRegisterInvoice;
         private System.Windows.Forms.Button cmdDergoEsl;
+        private System.Windows.Forms.Button button1;
     }
 }
 
