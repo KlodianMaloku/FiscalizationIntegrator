@@ -36,7 +36,7 @@ namespace EsgFiskDll.Classes
                                         OperatorCode = (string)dr["testOperatorCode"];
                                         IssuerNUIS = (string)dr["testissuerNUIS"];
                                         CertificatePassword = (string)dr["testCertificatePassword"];
-                                        CertificatePath = dr.IsNull("testCertificatePath") ? "" : (string)dr["testCertificatePath"];
+                                        //CertificatePath = dr.IsNull("testCertificatePath") ? null : (string)dr["testCertificatePath"];
                                         CertificateData = dr.IsNull("testCertificateData") ? null : (string)dr["testCertificateData"];
                                         ApiUsername = (string)dr["testFiskApiUsername"];
                                         ApiPassword = (string)dr["testFiskApiPassword"];
@@ -47,7 +47,7 @@ namespace EsgFiskDll.Classes
                                         BusinUnitCode = (string)dr["BusinUnitCode"];
                                         OperatorCode = (string)dr["OperatorCode"];
                                         IssuerNUIS = (string)dr["issuerNUIS"];
-                                        CertificatePath = dr.IsNull("CertificatePath") ? "" : (string)dr["CertificatePath"];
+                                        //CertificatePath = dr.IsNull("CertificatePath") ? null : (string)dr["CertificatePath"];
                                         CertificateData = dr.IsNull("CertificateData") ? null : (string)dr["CertificateData"];
                                         CertificatePassword = (string)dr["CertificatePassword"];
                                         ApiUsername = (string)dr["FiskApiUsername"];

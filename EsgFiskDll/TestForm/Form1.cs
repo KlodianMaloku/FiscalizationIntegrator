@@ -102,7 +102,7 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc generateIICQR = new EsgFiskDll.EsgFisc(conn, 1);
-                    MessageBox.Show(generateIICQR.CalculateQRCode(1399890));
+                    MessageBox.Show(generateIICQR.CalculateQRCode(3475148));
 
                 }
                 catch (SqlException ex)

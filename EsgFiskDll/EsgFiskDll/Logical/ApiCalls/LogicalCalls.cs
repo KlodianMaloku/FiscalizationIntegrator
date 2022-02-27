@@ -39,6 +39,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                         while (reader.Read())
                         {
                             body.TCR.TCRIntID = (string)reader["KODI"];
+                            body.TCR.Type = "REGULAR";
                         }
                     }
                     else
@@ -53,15 +54,15 @@ namespace EsgFiskDll.Logical.ApiCalls
                 IRestClient client = new RestClient(url);
                 IRestRequest request = new RestRequest(Method.POST);
 
-                IRestResponse<RegisterCashDeskResponse> resp = RestRequestHandler<RegisterCashDeskReq, RegisterCashDeskResponse>.MakeResquest(client, request, body, Configs);
+                IRestResponse<RegisterCashDeskResponseV2> resp = RestRequestHandler<RegisterCashDeskReq, RegisterCashDeskResponseV2>.MakeResquest(client, request, body, Configs);
 
                 if (resp.IsSuccessful)
                 {
-                    return "100 - " + resp.Data.tcrCode;
+                    return "100 - " + resp.Data.registerTCRResponse.tcrCode;
                 }
                 else
                 {
-                    return ErrorParser<RegisterCashDeskResponse>.ParseError(resp);
+                    return ErrorParser<RegisterCashDeskResponseV2>.ParseError(resp);
                 }
 
             }
@@ -110,7 +111,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                 IRestClient client = new RestClient(url);
                 IRestRequest request = new RestRequest(Method.POST);
 
-                IRestResponse<RegisterCashDeskResponseV2> resp = RestRequestHandler<RegisterCashDepositReq, RegisterCashDeskResponseV2>.MakeResquest(client, request, body, Configs);
+                IRestResponse<RegisterCashDepositResponseV2> resp = RestRequestHandler<RegisterCashDepositReq, RegisterCashDepositResponseV2>.MakeResquest(client, request, body, Configs);
 
                 if (resp.IsSuccessful)
                 {
@@ -118,7 +119,7 @@ namespace EsgFiskDll.Logical.ApiCalls
                 }
                 else
                 {
-                    return ErrorParser<RegisterCashDeskResponseV2>.ParseError(resp);
+                    return ErrorParser<RegisterCashDepositResponseV2>.ParseError(resp);
                 }
 
             }

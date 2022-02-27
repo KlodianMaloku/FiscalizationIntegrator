@@ -12,10 +12,12 @@ namespace EsgFiskDll.Logical
         public string header { get; set; }
         public string signature { get; set; }
     }
-
+    /// <summary>
+    /// register cash desk
+    /// </summary>
    public class RegisterCashDeskResponseV2
     {
-        public RegisterCashDepositReponse registerCashDepositResponse { get; set; }
+        public RegisterCashDeskResponse registerTCRResponse { get; set; }
         public string xmlRequest { get; set; }
     }
 
@@ -23,18 +25,31 @@ namespace EsgFiskDll.Logical
     {
         public string tcrCode { get; set; }
     }
+    /// <summary>
+    /// register CashDeposit
+    /// </summary>
 
-    public class RegisterCashDepositReponse : RespHeader
+    class RegisterCashDepositResponseV2
+    {
+        public RegisterCashDepositResponse registerCashDepositResponse { get; set; }
+        public string xlRequest { get; set; }
+    }
+
+    public class RegisterCashDepositResponse : RespHeader
     {
         public string fcdc { get; set; }
     }
-
+    /// <summary>
+    /// GenerateIICTypeResponse
+    /// </summary>
     public class GenerateIICTypeResponse
     {
         public string iicSignature { get; set; }
         public string iic { get; set; }
     }
-
+    /// <summary>
+    /// GetTaxPayersResponse
+    /// </summary>
     internal class TaxPayer
     {
         public string address { get; set; }
@@ -49,7 +64,9 @@ namespace EsgFiskDll.Logical
     {
         public List<TaxPayer> taxpayers { get; set; }
     }
-
+    /// <summary>
+    /// registerInvoiceResponse
+    /// </summary>
     internal class registerInvoiceReponseV2
     {
         public RegisterInvoiceResponse registerInvoiceResponse { get; set; }
