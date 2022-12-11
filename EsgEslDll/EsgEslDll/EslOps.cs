@@ -21,59 +21,109 @@ namespace EsgEslDll
             conn_ = conn;
             cnf = new EslConfigs(conn);
         }
-
-        public string SendItems()
+        class sentItem
         {
-            var client = new HttpClient();
-
-            // Request headers
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cnf.SubscriptionKey);
-
-            var fileName = Guid.NewGuid().ToString() + ".txt";
-
-            var uri = cnf.EslBaseUrl + "/" + cnf.StoreId + "/items/files/"+fileName;
-
-            var body = "";
-
-            using (SqlCommand cmd = new SqlCommand())
+            public long PKID { get; set; }
+            public int NEWART_UPDART_CMIM_PROMO_ENDPROMO { get; set; }
+        }
+        public String SendItems()
+        {
+            int line = 0;
+            try
             {
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                var client = new HttpClient();
+
+                // Request headers
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", cnf.SubscriptionKey);
+
+                var fileName = Guid.NewGuid().ToString() + ".txt";
+
+                var uri = cnf.EslBaseUrl + "/" + cnf.StoreId + "/items/files/"+fileName;
+
+                var body = "";
+
+                List<sentItem> sentItemsList = new List<sentItem>();
+
+                using (SqlCommand cmd = new SqlCommand())
                 {
-                    cmd.CommandText = "UP_POS_KRIJO_PERMBAJTJE_SKEDARI_PER_ESL_3";
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Connection = conn_;
-                    DataSet ds = new DataSet();
-                    sda.Fill(ds);
-                    if (ds.Tables.Count != 0)
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        if (ds.Tables[0].Rows.Count != 0)
+                        cmd.CommandText = "UP_POS_KRIJO_PERMBATJE_ESL_SES";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Connection = conn_;
+                        DataSet ds = new DataSet();
+                        sda.Fill(ds);
+                        if (ds.Tables.Count != 0)
                         {
-                            foreach (DataRow dr in ds.Tables[0].Rows)
+                            if (ds.Tables[0].Rows.Count != 0)
                             {
-
-                                body += (string)dr["ROW_"] + Environment.NewLine;
-
+                                foreach (DataRow dr in ds.Tables[0].Rows)
+                                {
+                                    
+                                    body += (string)dr["ROW_"] + Environment.NewLine;
+                                    
+                                    sentItemsList.Add(new sentItem { PKID = long.Parse( dr["PKID"].ToString()), NEWART_UPDART_CMIM_PROMO_ENDPROMO = (int)dr["NEWART_UPDART_CMIM_PROMO_ENDPROMO"] });
+                                    
+                                }
                             }
                         }
                     }
                 }
+
+                HttpResponseMessage response;
+
+                // Request body
+                byte[] byteData = Encoding.UTF8.GetBytes(body);
+
+
+                using (var content = new ByteArrayContent(byteData))
+                {
+                    content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
+                    Task<HttpResponseMessage> task = Task.Run<HttpResponseMessage>(async () => await client.PostAsync(uri, content));
+                    response = task.Result;
+                }
+
+                var statusCode = response.StatusCode.ToString();
+                
+
+                Task<String> retTask = Task.Run<String>(async () => await response.Content.ReadAsStringAsync());
+
+
+                if (statusCode == "OK")
+                {
+
+                    foreach (sentItem item in sentItemsList)
+                    {
+                        using (SqlCommand cmdSetProcessed = new SqlCommand())
+                        {
+                            
+                            cmdSetProcessed.Connection = conn_;
+                            
+                            cmdSetProcessed.CommandText = "UP_POS_UPDATE_ESL_SES";
+                            
+                            cmdSetProcessed.CommandType = CommandType.StoredProcedure;
+                            
+                            cmdSetProcessed.Parameters.Add(new SqlParameter("PKID", item.PKID));
+                            
+                            cmdSetProcessed.Parameters.Add(new SqlParameter("NEWART_UPDART_CMIM_PROMO_ENDPROMO", item.NEWART_UPDART_CMIM_PROMO_ENDPROMO));
+                            
+                            cmdSetProcessed.ExecuteNonQuery();
+                        }
+                    }
+
+                    return statusCode;
+
+                }
+                else
+                {
+                    return statusCode + ":" + retTask.Result ;
+                }
+                
             }
-
-            HttpResponseMessage response;
-
-            // Request body
-            byte[] byteData = Encoding.UTF8.GetBytes(body);
-
-            using (var content = new ByteArrayContent(byteData))
+            catch(Exception ex)
             {
-                content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-                Task<HttpResponseMessage> task = Task.Run<HttpResponseMessage>(async () => await client.PostAsync(uri, content));
-                response = task.Result;
+                return "500 -" + line.ToString() + "             " + ex.Message + "     " + ex.StackTrace + "       " + ex.Source + "     " + ex.InnerException;
             }
-
-            Task<String> retTask = Task.Run<String>(async () => await response.Content.ReadAsStringAsync());
-
-            return retTask.Result;
 
         }
     }

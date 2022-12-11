@@ -14,8 +14,8 @@ namespace EsgFiskDll.Logical
     {
         public string BusinUnitCode { get; set; }
         public string IssuerNUIS { get; set; }
-
         public string TCRIntID { get; set; }
+        public string Type { get; set; }
         public string ValidFrom { get; set; }
         public bool ValidFromSpecified { get; set; }
     }
@@ -98,6 +98,16 @@ namespace EsgFiskDll.Logical
         public note Note { get; set; }
         public string DocumentCurrencyCode { get; set; }
 
+    }
+    class SumInvIICRefs
+    {
+        public string IIC { get; set; }
+        public string IssueDateTime { get; set; }
+    }
+    class SupplyDateOrPeriod
+    {
+        public string End { get; set; }
+        public string Start { get; set; }
     }
     internal class Invoice
     {

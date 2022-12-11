@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http.Headers;
 using System.Data;
-using System.Data.SqlTypes;
 using System.IO;
 using EsgPeshoreDll.Classes;
 
 namespace EsgPeshoreDll
 {
+    class sentItem
+    {
+        public long PKID { get; set; }
+        public int NEWART_UPDART_CMIM_PROMO_ENDPROMO { get; set; }
+    }
     public class PeshoreOps
     {
         private PeshoreConfigs cnf { get; set; }
@@ -23,64 +22,106 @@ namespace EsgPeshoreDll
             cnf = new PeshoreConfigs(conn);
         }
 
-        public string SendItemsPeshore()
+        public String SendItemsPeshore()
         {
-            string body = "";
-
-            using (SqlCommand cmd = new SqlCommand())
+            
+            try
             {
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                string body = "";
+               
+                List<sentItem> sentItemsList = new List<sentItem>();
+               
+                using (SqlCommand cmd = new SqlCommand())
                 {
-                    cmd.CommandText = "UP_POS_KRIJO_PERMBAJTJE_SKEDARI_PER_PESHORE";
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Connection = conn_;
-                    DataSet ds = new DataSet();
-                    sda.Fill(ds);
-                    if (ds.Tables.Count != 0)
+                   
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        if (ds.Tables[0].Rows.Count != 0)
+                       
+                        cmd.CommandText = "UP_POS_KRIJO_PERMBAJTJE_SKEDARI_PER_PESHORE";
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Connection = conn_;
+                        DataSet ds = new DataSet();
+                        sda.Fill(ds);
+                       
+                        if (ds.Tables.Count != 0)
                         {
-                            foreach (DataRow dr in ds.Tables[0].Rows)
+                           
+                            if (ds.Tables[0].Rows.Count != 0)
                             {
+                               
+                                foreach (DataRow dr in ds.Tables[0].Rows)
+                                {
+                                   
+                                    body += (string)dr["ROW_"] + Environment.NewLine;
 
-                                body += (string)dr["ROW_"] + Environment.NewLine;
+                                    sentItemsList.Add(new sentItem { PKID = long.Parse(dr["pkid"].ToString()), NEWART_UPDART_CMIM_PROMO_ENDPROMO = (int)dr["NEWART_UPDART_CMIM_PROMO_ENDPROMO"] });
 
+                                }
                             }
                         }
                     }
                 }
+               
+                string WriteResult = WriteTextFile(body, cnf.artdata_path, false);
+
+                if (WriteResult == "OK")
+                {
+                    if (conn_.State == ConnectionState.Closed)
+                        conn_.Open();
+
+                    foreach (sentItem item in sentItemsList)
+                    {
+
+                        using (SqlCommand cmdSetProcessed = new SqlCommand())
+                        {
+                            cmdSetProcessed.Connection = conn_;
+                            cmdSetProcessed.CommandText = "UP_POS_UPDATE_PESHORE_STATUS";
+                            cmdSetProcessed.CommandType = CommandType.StoredProcedure;
+                            cmdSetProcessed.Parameters.Add(new SqlParameter("PKID", item.PKID));
+                            cmdSetProcessed.Parameters.Add(new SqlParameter("NEWART_UPDART_CMIM_PROMO_ENDPROMO", item.NEWART_UPDART_CMIM_PROMO_ENDPROMO));
+                            cmdSetProcessed.ExecuteNonQuery();
+                        }
+
+                    }
+                }
+
+
+                return "OK" + body;
+
             }
-
-            bool WriteResult = WriteTextFile(body, cnf.artdata_path, false);
-
-
-            return WriteResult ? "100- ok" : "500- error creating file";
-
+            catch(Exception ex)
+            {
+                return "500 - Line:" + "               " + ex.Message + "     " + ex.StackTrace + "       " + ex.Source + "     " + ex.InnerException;
+            }
+            
 
         }
 
-        private bool WriteTextFile(string text,string path,bool append)
+        private string WriteTextFile(string text,string path,bool append)
         {
 
             try
             {
+
+                List<Int64> processedItems = new List<Int64>();
+
                 if (text != string.Empty && path != string.Empty)
                 {
                     var dir = Path.GetDirectoryName(path);
                     if (!Directory.Exists(dir))
                         Directory.CreateDirectory(dir);
-                    using (var sw = new StreamWriter(path, append))
-                    {
-                        sw.WriteLine(text);
-                    }
-                    return true;
+
+                    System.IO.File.AppendAllText(path, text);
+
+                    return "OK";
                 }
                 
-                return false;
+                return "Gabim";
+
             }
             catch (Exception ex)
             {
-                return false;
+                return "500 -" + ex.Message + "     " + ex.StackTrace + "       " + ex.Source + "     " + ex.InnerException;
             }
         }
     }

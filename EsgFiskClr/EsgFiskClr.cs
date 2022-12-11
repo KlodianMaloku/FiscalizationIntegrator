@@ -5,8 +5,6 @@ using System.Data.SqlTypes;
 using Microsoft.SqlServer.Server;
 using EsgFiskDll;
 using EsgEslDll;
-using EsgPeshoreDll;
-using System.Threading.Tasks;
 using System.Net;
 
 public class EsgFisk
@@ -151,39 +149,47 @@ public class EsgFisk
 
 public class EsgEsl
 {
-    [Microsoft.SqlServer.Server.SqlFunction(SystemDataAccess = SystemDataAccessKind.Read, DataAccess = DataAccessKind.Read)]
-    public  static SqlString SendItems()
+    [Microsoft.SqlServer.Server.SqlProcedure(Name ="SendItems")]
+    public  static void SendItems( out String Response )
     {
         using (SqlConnection conn = new SqlConnection("context connection=true"))
         {
-            string response = "";
+            Response = "";
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             try
             {
 
                 conn.Open();
                 EslOps eslOps = new EslOps(conn);
-                return eslOps.SendItems();
+                Response = eslOps.SendItems();
 
             }
             catch (Exception ex)
             {
-                return "600 -" + ex.Message + "     " +  ex.StackTrace + "       " + ex.Source + "     " + ex.InnerException ;
+                Response = "600 -" + ex.Message + "     " +  ex.StackTrace + "       " + ex.Source + "     " + ex.InnerException ;
             }
 
         }
     }
 }
 
-public class EsgPeshore
-{
-    [Microsoft.SqlServer.Server.SqlFunction(SystemDataAccess = SystemDataAccessKind.Read, DataAccess = DataAccessKind.Read)]
-    public static SqlString SendItemsPeshore()
-    {
-        using (SqlConnection conn = new SqlConnection("context connection = true"))
-        {
-            PeshoreOps ops = new PeshoreOps(conn);
-            return ops.SendItemsPeshore();
-        }
-    }
-}
+//public class EsgPeshore
+//{
+//    [Microsoft.SqlServer.Server.SqlProcedure(Name = "SendItemsPeshore")]
+//    public static void SendItemsPeshore(out String Response)
+//    {
+//        using (SqlConnection conn = new SqlConnection("context connection = true"))
+//        {
+//            try
+//            {
+//                PeshoreOps ops = new PeshoreOps(conn);
+//                Response = ops.SendItemsPeshore();
+//            }
+//            catch (Exception ex)
+//            {
+//                Response = "600 -" + ex.Message + "     " + ex.StackTrace + "       " + ex.Source + "     " + ex.InnerException;
+//            }
+
+//        }
+//    }
+//}
