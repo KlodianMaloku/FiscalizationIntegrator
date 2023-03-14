@@ -1,6 +1,6 @@
 ﻿using EsgFiskDll.Classes;
+using EsgFiskDll.DevPos.ApiCalls;
 using EsgFiskDll.Iterfaces;
-using EsgFiskDll.Logical.ApiCalls;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -8,20 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EsgFiskDll.Logical
+namespace EsgFiskDll.DevPos
 {
-    internal class LogiFis:IFiscOps
+    internal class DevPos:IFiscOps
     {
-        public LogicalCalls LogicalCalls { get; set; }
-        public LogiFis()
+        public DevPos()
         {
-            LogicalCalls = new LogicalCalls();
+            DevPosApiCall = new DevPosApiCalls();
         }
+        public DevPosApiCalls DevPosApiCall { get; set; }
         public string registerCashDesk(SqlConnection conn, FiskConfigs Configs, int CashDeskId, int UserId)
         {
             try
             {
-                return LogicalCalls.doRegisterCashDesk(conn, Configs, CashDeskId, UserId).ToString();
+                return DevPosApiCall.doRegisterCashDesk(conn, Configs, CashDeskId, UserId).ToString();
             }
             catch (SqlException ex)
             {
@@ -33,7 +33,7 @@ namespace EsgFiskDll.Logical
         {
             try
             {
-                return LogicalCalls.doRegisterCashDeposit(conn, Configs, CashDepositId, UserId).ToString();
+                return DevPosApiCall.doRegisterCashDeposit(conn, Configs, CashDepositId, UserId).ToString();
             }
             catch (SqlException ex)
             {
@@ -43,7 +43,7 @@ namespace EsgFiskDll.Logical
 
         public string registerInvoice(SqlConnection conn, FiskConfigs Configs, int InvoiceId, int UserId)
         {
-            return LogicalCalls.doRegisterInvoice(conn, Configs, InvoiceId, UserId);
+            return DevPosApiCall.doRegisterInvoice(conn, Configs, InvoiceId, UserId);
         }
 
         public string registerEInvoice(SqlConnection conn, FiskConfigs Configs, int InvoiceId, int UserId)
@@ -53,7 +53,7 @@ namespace EsgFiskDll.Logical
 
         public string getTaxPayer(SqlConnection conn, FiskConfigs Configs, string TaxPayerNipt, int UserId)
         {
-            return LogicalCalls.doGetTaxpayers(conn, Configs, TaxPayerNipt, UserId);
+            return DevPosApiCall.doGetTaxpayers(conn, Configs, TaxPayerNipt, UserId);
         }
 
         public string RegisterWTN(SqlConnection conn, FiskConfigs Configs, int WTNId, int UserId)
@@ -63,8 +63,7 @@ namespace EsgFiskDll.Logical
 
         public string GenerateIICType(SqlConnection conn, FiskConfigs Configs, int InvoiceId, int UserId)
         {
-            LogicalCalls doGenereateIICType = new LogicalCalls();
-            return doGenereateIICType.doGenereateIICType(conn, Configs, InvoiceId, UserId);
+            return DevPosApiCall.doGenereateIICType(conn, Configs, InvoiceId, UserId);
         }
 
         public string GenerateWTNICType(SqlConnection conn, FiskConfigs Configs, int WTNId, int UserId)
@@ -79,8 +78,7 @@ namespace EsgFiskDll.Logical
 
         public string CalculateQRCode(SqlConnection conn, FiskConfigs Configs, int InvoiceId, int UserId)
         {
-            LogicalCalls doGenereateIICType = new LogicalCalls();
-            return doGenereateIICType.doGenereateIICQR(conn, Configs, InvoiceId, UserId);
+            return DevPosApiCall.doGenereateIICQR(conn, Configs, InvoiceId, UserId);
         }
 
 

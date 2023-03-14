@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EsgFiskDll.Logical.ApiCalls
+namespace EsgFiskDll.DevPos.ApiCalls
 {
     public class reqHeader
     {

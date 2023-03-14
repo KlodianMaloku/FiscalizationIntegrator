@@ -75,6 +75,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DevPos\ApiCalls\ErrorParser.cs" />
+    <Compile Include="DevPos\ApiCalls\DevPosCalls.cs" />
+    <Compile Include="DevPos\ApiCalls\RequestBase.cs" />
+    <Compile Include="DevPos\ApiCalls\RestRequestHandler.cs" />
+    <Compile Include="DevPos\DevPos.cs" />
+    <Compile Include="DevPos\Model\constants.cs" />
+    <Compile Include="DevPos\Model\ReqBaseClasses.cs" />
+    <Compile Include="DevPos\Model\RespBaseClasses.cs" />
     <Compile Include="EsgFiskCalls.cs" />
     <Compile Include="EsgTools.cs" />
     <Compile Include="Iterfaces\IFiscOps.cs" />

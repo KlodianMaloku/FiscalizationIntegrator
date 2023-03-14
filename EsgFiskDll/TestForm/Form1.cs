@@ -56,12 +56,16 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc RegisterCashDeskCaller = new EsgFiskDll.EsgFisc(conn, 1);
-                    MessageBox.Show(RegisterCashDeskCaller.registerCashDeposit(3));
+                    MessageBox.Show(RegisterCashDeskCaller.registerCashDeposit(24));
 
                 }
                 catch (SqlException ex)
                 {
                     MessageBox.Show("Lidhja me db Deshtoi: " + ex.Message.ToString(), "Esg Fisk Module tester");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ndodhi nje gabim ne db: " + ex.Message.ToString(), "Esg Fisk Module tester");
                 }
                 finally
                 {

@@ -36,7 +36,7 @@ namespace EsgFiskDll.Classes
                                         OperatorCode = (string)dr["testOperatorCode"];
                                         IssuerNUIS = (string)dr["testissuerNUIS"];
                                         CertificatePassword = (string)dr["testCertificatePassword"];
-                                        //CertificatePath = dr.IsNull("testCertificatePath") ? null : (string)dr["testCertificatePath"];
+                                        CertificatePath = dr.IsNull("testCertificatePath") ? null : (string)dr["testCertificatePath"];
                                         CertificateData = dr.IsNull("testCertificateData") ? null : (string)dr["testCertificateData"];
                                         ApiUsername = (string)dr["testFiskApiUsername"];
                                         ApiPassword = (string)dr["testFiskApiPassword"];
@@ -47,7 +47,7 @@ namespace EsgFiskDll.Classes
                                         BusinUnitCode = (string)dr["BusinUnitCode"];
                                         OperatorCode = (string)dr["OperatorCode"];
                                         IssuerNUIS = (string)dr["issuerNUIS"];
-                                        //CertificatePath = dr.IsNull("CertificatePath") ? null : (string)dr["CertificatePath"];
+                                        CertificatePath = dr.IsNull("CertificatePath") ? null : (string)dr["CertificatePath"];
                                         CertificateData = dr.IsNull("CertificateData") ? null : (string)dr["CertificateData"];
                                         CertificatePassword = (string)dr["CertificatePassword"];
                                         ApiUsername = (string)dr["FiskApiUsername"];
@@ -55,7 +55,7 @@ namespace EsgFiskDll.Classes
                                         url = (string)dr["FiskCompanyUrl"];
 
                                     }
-                                    ServerDatetime = (string)dr["ServerDatetime"];
+                                    ServerDatetime = "2023-03-02T21:25:00+01:00"; // (string)dr["ServerDatetime"];
                                     IsServiceTest = (int)dr["IsServiceTest"] == 1 ? true : false;
                                     fiscCompany = (string)dr["fiscCompany"];
 

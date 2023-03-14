@@ -24,6 +24,9 @@ namespace EsgFiskDll
                 case "LOGICAL":
                     FiscCalls = new EsgFiskCalls(_conn, configs, UserId, new Logical.LogiFis());
                     break;
+                case "DEVPOS":
+                    FiscCalls = new EsgFiskCalls(_conn, configs, UserId, new DevPos.DevPos());
+                    break;
                 default:
                     break;
             }
