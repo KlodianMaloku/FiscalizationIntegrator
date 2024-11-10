@@ -83,7 +83,7 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc generateIIC = new EsgFiskDll.EsgFisc(conn, 1);
-                    MessageBox.Show(generateIIC.GenerateIICType(3475148));
+                    MessageBox.Show(generateIIC.GenerateIICType(2378651));
 
                 }
                 catch (SqlException ex)
@@ -106,7 +106,7 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc generateIICQR = new EsgFiskDll.EsgFisc(conn, 1);
-                    MessageBox.Show(generateIICQR.CalculateQRCode(3475148));
+                    MessageBox.Show(generateIICQR.CalculateQRCode(2378651));
 
                 }
                 catch (SqlException ex)
@@ -152,7 +152,7 @@ namespace TestForm
                 try
                 {
                     EsgFiskDll.EsgFisc doREgisterIvoice = new EsgFiskDll.EsgFisc(conn, 1);
-                    MessageBox.Show(doREgisterIvoice.registerEInvoice(3475148));
+                    MessageBox.Show(doREgisterIvoice.registerEInvoice(2378652));
                 }
                 catch (SqlException ex)
                 {
@@ -187,6 +187,11 @@ namespace TestForm
             int i = 0;
             i++;
             MessageBox.Show(i.ToString());
+        }
+
+        private void txtSqlConnection_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

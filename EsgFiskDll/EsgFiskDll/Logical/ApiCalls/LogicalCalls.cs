@@ -5,10 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using EsgFiskDll.Logical.ApiCalls;
+using RestSharp.Serialization.Json;
 
 namespace EsgFiskDll.Logical.ApiCalls
 {
@@ -157,10 +155,10 @@ namespace EsgFiskDll.Logical.ApiCalls
 
                                 IRestClient client = new RestClient(url);
                                 IRestRequest request = new RestRequest(Method.POST);
-
+                                string filePath = $@"{Configs.filePath}\\doGenereateIICType-{body.InvNum}";
                                 IRestResponse<GenerateIICTypeResponse> resp =
                                     RestRequestHandler<GenerateIICTYPEReq, GenerateIICTypeResponse>.MakeResquest(client,
-                                        request, body, Configs);
+                                        request, body, Configs, filePath);
 
                                 if (resp.IsSuccessful)
                                 {
@@ -218,9 +216,19 @@ namespace EsgFiskDll.Logical.ApiCalls
                                 request.AddHeader("Accept", "*/*");
                                 request.AddHeader("Connection", "keep-alive");
                                 request.AddJsonBody(body);
+
+                                JsonSerializer jsonSerializer = new JsonSerializer();
+                                string jsonBody = jsonSerializer.Serialize(body);
+                                string filePath = $@"{Configs.filePath}\\doGenereateIICQR-{body.InvOrdNum}_req.json";
+                                Utils.SaveJsonBodyToFile(jsonBody, filePath);
+
                                 HttpBasicAuthenticator authenticator = new HttpBasicAuthenticator(Configs.ApiUsername, Configs.ApiPassword);
                                 authenticator.Authenticate(client, request);
+
                                 IRestResponse resp = client.Post(request);
+
+                                filePath = $@"{Configs.filePath}\\doGenereateIICQR-{body.InvOrdNum}_resp.json";
+                                Utils.SaveJsonBodyToFile(resp.Content.ToString(), filePath);
 
                                 if (resp.IsSuccessful)
                                 {
@@ -354,25 +362,45 @@ namespace EsgFiskDll.Logical.ApiCalls
 
                             if (ds.Tables[1].Rows.Count != 0)
                             {
-                                body.Invoice.Items = new List<Item>();
+                                body.Invoice.Items = new List<IItem>();
                                 foreach (DataRow dr in ds.Tables[1].Rows)
                                 {
-                                    Item item = new Item();
-
-                                    item.C = (string)dr["C"];
-                                    item.N = (string)dr["N"];
-                                    item.PA = (double)dr["PA"];
-                                    item.PB = (double)dr["PB"];
-                                    item.Q = (double)dr["Q"];
-                                    item.U = (string)dr["U"];
-                                    item.UPA = (double)dr["UPA"];
-                                    item.UPB = (double)dr["UPB"];
-                                    item.VA = (double)dr["VA"];
-                                    item.VASpecified = (int)dr["VASpecified"] == 1;
-                                    item.VR = (double)dr["VR"];
-                                    item.VRSpecified = (int)dr["VRSpecified"] == 1;
-
-                                    body.Invoice.Items.Add(item);
+                                    if ((double)dr["VR"] == 0)
+                                    {
+                                        ItemExVat itemEx = new ItemExVat();
+                                        itemEx.C = (string)dr["C"];
+                                        itemEx.N = (string)dr["N"];
+                                        itemEx.PA = (double)dr["PA"];
+                                        itemEx.PB = (double)dr["PB"];
+                                        itemEx.Q = (double)dr["Q"];
+                                        itemEx.U = (string)dr["U"];
+                                        itemEx.UPA = (double)dr["UPA"];
+                                        itemEx.UPB = (double)dr["UPB"];
+                                        itemEx.VA = (double)dr["VA"];
+                                        itemEx.VASpecified = (int)dr["VASpecified"] == 1;
+                                        itemEx.VR = (double)dr["VR"];
+                                        itemEx.VRSpecified = (int)dr["VRSpecified"] == 1;
+                                        itemEx.EX = (string)dr["EX"];
+                                        itemEx.EXSpecified = true;
+                                        body.Invoice.Items.Add(itemEx);
+                                    }
+                                    else
+                                    {
+                                        Item item = new Item();
+                                        item.C = (string)dr["C"];
+                                        item.N = (string)dr["N"];
+                                        item.PA = (double)dr["PA"];
+                                        item.PB = (double)dr["PB"];
+                                        item.Q = (double)dr["Q"];
+                                        item.U = (string)dr["U"];
+                                        item.UPA = (double)dr["UPA"];
+                                        item.UPB = (double)dr["UPB"];
+                                        item.VA = (double)dr["VA"];
+                                        item.VASpecified = (int)dr["VASpecified"] == 1;
+                                        item.VR = (double)dr["VR"];
+                                        item.VRSpecified = (int)dr["VRSpecified"] == 1;
+                                        body.Invoice.Items.Add(item);
+                                    }
                                 }
                             }
 
@@ -392,19 +420,37 @@ namespace EsgFiskDll.Logical.ApiCalls
 
                             if (ds.Tables[3].Rows.Count != 0)
                             {
-                                body.Invoice.SameTaxes = new List<SameTax>();
+                                body.Invoice.SameTaxes = new List<ISameTax>();
                                 foreach (DataRow dr in ds.Tables[3].Rows)
                                 {
-                                    SameTax sm = new SameTax
+                                    if ((double)dr["VATAmt"] == 0)
                                     {
-                                        NumOfItems = (int)dr["NumOfItems"],
-                                        PriceBefVAT = (double)dr["PriceBEfVAT"],
-                                        VATAmt = (double)dr["VATAmt"],
-                                        VATAmtSpecified = (int)dr["VATAmtSpecified"] == 1,
-                                        VATRate = (double)dr["VATRate"],
-                                        VATRateSpecified = (int)dr["VATRatespecified"] == 1
-                                    };
-                                    body.Invoice.SameTaxes.Add(sm);
+                                        SameTaxExVat sm = new SameTaxExVat
+                                        {
+                                            NumOfItems = (int)dr["NumOfItems"],
+                                            PriceBefVAT = (double)dr["PriceBEfVAT"],
+                                            VATAmt = (double)dr["VATAmt"],
+                                            VATAmtSpecified = (int)dr["VATAmtSpecified"] == 1,
+                                            VATRate = (double)dr["VATRate"],
+                                            VATRateSpecified = (int)dr["VATRatespecified"] == 1,
+                                            ExemptFromVAT = (string)dr["ExemptFromVAT"],
+                                            ExemptFromVATSpecified = true
+                                        };
+                                        body.Invoice.SameTaxes.Add(sm);
+                                    }
+                                    else
+                                    {
+                                        SameTax sm = new SameTax
+                                        {
+                                            NumOfItems = (int)dr["NumOfItems"],
+                                            PriceBefVAT = (double)dr["PriceBEfVAT"],
+                                            VATAmt = (double)dr["VATAmt"],
+                                            VATAmtSpecified = (int)dr["VATAmtSpecified"] == 1,
+                                            VATRate = (double)dr["VATRate"],
+                                            VATRateSpecified = (int)dr["VATRatespecified"] == 1
+                                        };
+                                        body.Invoice.SameTaxes.Add(sm);
+                                    }                                    
                                 }
                             }
 
@@ -467,8 +513,8 @@ namespace EsgFiskDll.Logical.ApiCalls
 
                             IRestClient client = new RestClient(url);
                             IRestRequest request = new RestRequest(Method.POST);
-
-                            IRestResponse<registerInvoiceReponseV2> resp = RestRequestHandler<RegisterInvoiceReq, registerInvoiceReponseV2>.MakeResquest(client, request, body, Configs);
+                            string filePath = $@"{Configs.filePath}\\doRegisterInvoice-{body.Invoice.InvOrdNum}";
+                            IRestResponse<registerInvoiceReponseV2> resp = RestRequestHandler<RegisterInvoiceReq, registerInvoiceReponseV2>.MakeResquest(client, request, body, Configs, filePath);
 
                             if (resp.IsSuccessful)
                             {

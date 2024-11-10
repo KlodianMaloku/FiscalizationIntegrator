@@ -58,6 +58,7 @@ namespace EsgFiskDll.Classes
                                     ServerDatetime = "2023-03-02T21:25:00+01:00"; // (string)dr["ServerDatetime"];
                                     IsServiceTest = (int)dr["IsServiceTest"] == 1 ? true : false;
                                     fiscCompany = (string)dr["fiscCompany"];
+                                    filePath = (string)dr["filePath"];
 
                                 }
                             }
@@ -82,8 +83,8 @@ namespace EsgFiskDll.Classes
         public string ApiPassword { get; set; }
         public bool IsServiceTest { get; set; }
         public string fiscCompany { get; set; }
-
         public string ServerDatetime { get; set; }
+        public string filePath { get; set; }
 
     }
 

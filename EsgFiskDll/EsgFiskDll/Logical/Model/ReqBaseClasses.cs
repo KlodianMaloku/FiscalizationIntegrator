@@ -1,5 +1,6 @@
 ﻿using EsgFiskDll.Classes;
 using EsgFiskDll.Logical.ApiCalls;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -131,9 +132,9 @@ namespace EsgFiskDll.Logical
         public bool TotVATAmtSpecified { get; set; }
         public string TypeOfInv { get; set; }
         public Buyer Buyer { get; set; }
-        public List<Item> Items { get; set; }
+        public List<IItem> Items { get; set; }
         public List<PayMethod> PayMethods { get; set; }
-        public List<SameTax> SameTaxes { get; set; }
+        public List<ISameTax> SameTaxes { get; set; }
         public Seller Seller { get; set; }
     }
 
@@ -148,7 +149,12 @@ namespace EsgFiskDll.Logical
         public string Town { get; set; }
     }
 
-    internal class Item
+    internal class IItem
+    {
+
+    }
+
+    internal class Item: IItem
     {
         public string C { get; set; }
         public string N { get; set; }
@@ -162,6 +168,24 @@ namespace EsgFiskDll.Logical
         public bool VASpecified { get; set; }
         public double VR { get; set; }
         public bool VRSpecified { get; set; }
+    }
+
+    internal class ItemExVat: IItem
+    {
+        public string C { get; set; }
+        public string N { get; set; }
+        public double PA { get; set; }
+        public double PB { get; set; }
+        public double Q { get; set; }
+        public string U { get; set; }
+        public double UPA { get; set; }
+        public double UPB { get; set; }
+        public double VA { get; set; }
+        public bool VASpecified { get; set; }
+        public double VR { get; set; }
+        public bool VRSpecified { get; set; }
+        public string EX { get; set; }
+        public bool EXSpecified { get; set; }
 
     }
 
@@ -171,7 +195,13 @@ namespace EsgFiskDll.Logical
         public string Type { get; set; }
     }
 
-    internal class SameTax
+
+    internal class ISameTax
+    {
+
+    }
+
+    internal class SameTax: ISameTax
     {
         public int NumOfItems { get; set; }
         public double PriceBefVAT { get; set; }
@@ -179,7 +209,18 @@ namespace EsgFiskDll.Logical
         public bool VATAmtSpecified { get; set; }
         public double VATRate { get; set; }
         public bool VATRateSpecified { get; set; }
+    }
 
+    internal class SameTaxExVat: ISameTax
+    {
+        public string ExemptFromVAT { get; set; }
+        public bool ExemptFromVATSpecified { get; set; }
+        public int NumOfItems { get; set; }
+        public double PriceBefVAT { get; set; }
+        public double VATAmt { get; set; }
+        public bool VATAmtSpecified { get; set; }
+        public double VATRate { get; set; }
+        public bool VATRateSpecified { get; set; }
     }
 
     internal class Seller
